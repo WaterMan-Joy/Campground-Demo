@@ -36,6 +36,14 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new')
 })
 
+
+app.post('/campgrounds', async (req, res) => {
+    const campground = new Campground(req.body.campground)
+    console.log(campground)
+    await campground.save()
+    res.redirect(`campgrounds/${campground._id}`)
+})
+
 app.get('/campgrounds/:id', async (req, res) => {
     // const { id } = req.params
     const findID = await Campground.findById(req.params.id)
@@ -44,9 +52,6 @@ app.get('/campgrounds/:id', async (req, res) => {
     })
 })
 
-app.post('/campgrounds', async (req, res) => {
-    res.send(req.body)
-})
 
 
 app.listen(3000, () => {
