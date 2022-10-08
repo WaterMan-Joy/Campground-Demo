@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>new</title>
+    <title>Edit Page</title>
+
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -13,15 +14,23 @@
     />
   </head>
   <body>
-    <h1>New</h1>
-    <div>
-      <form action="/campgrounds" method="POST">
-        <input type="text" placeholder="title" name="campground[title]" />
-        <input type="text" placeholder="location" name="campground[location]" />
-        <button type="submit">BUTTON</button>
-      </form>
-    </div>
-    <a href="/campgrounds">Cancel</a>
+    <h1>Edit Page</h1>
+
+    <form action="/campgrounds/<%= findID._id %>?_method=PUT" method="POST">
+      <input
+        type="text"
+        placeholder="<%= findID.title %> "
+        name="campground[title]"
+      />
+      <input
+        type="text"
+        placeholder="<%= findID.location %> "
+        name="campground[location]"
+      />
+      <button type="submit">Save</button>
+    </form>
+
+    <a href="/campgrounds/<%=  %> "></a>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
