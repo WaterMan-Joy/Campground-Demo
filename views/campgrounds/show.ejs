@@ -18,6 +18,13 @@
     <footer>
       <a href="/campgrounds">All Campgrounds</a>
       <a href="/campgrounds/<%= findID._id %>/edit">Edit</a>
+
+      <form
+        action="/campgrounds/<%= findID._id %>?_method=DELETE"
+        method="POST"
+      >
+        <button type="submit">Delete</button>
+      </form>
     </footer>
 
     <script
