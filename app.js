@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const path = require('path')
 const Campground = require('./models/campground')
 const methodOverride = require('method-override')
+const morgan = require('morgan')
 
 const app = express()
 
@@ -21,6 +22,7 @@ app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+app.use(morgan('dev'))
 
 app.get('/', (req, res) => {
     res.render('home')
