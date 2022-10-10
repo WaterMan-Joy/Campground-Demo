@@ -4,6 +4,7 @@ const path = require('path')
 const Campground = require('./models/campground')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
+const ejsMate = require('ejs-mate')
 
 const app = express()
 
@@ -20,6 +21,7 @@ async function main() {
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
+app.engine('ejs', ejsMate)
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(morgan('dev'))
