@@ -1,15 +1,26 @@
 <% layout('layouts/boilerplate') %>
-<h1>Name - <%= findID.title %></h1>
-<h1>Location - <%= findID.location %></h1>
-<img src="<%= findID.image %> " alt="" />
-<h2>Price - <%= findID.price %></h2>
-<span><%= findID.description %> </span>
+<div class="card">
+  <div class="card-body">
+    <h1>Name - <%= findID.title %></h1>
+    <h1>Location - <%= findID.location %></h1>
+    <img class="img-thumbnail" src="<%= findID.image %> " alt="" />
+    <h2>Price - <%= findID.price %></h2>
+    <span><%= findID.description %> </span>
 
-<footer>
-  <a href="/campgrounds">All Campgrounds</a>
-  <a href="/campgrounds/<%= findID._id %>/edit">Edit</a>
+    <footer>
+      <a href="/campgrounds"
+        ><button class="btn btn-primary">All Campgrounds</button></a
+      >
+      <a href="/campgrounds/<%= findID._id %>/edit"
+        ><button class="btn btn-warning">Edit</button></a
+      >
 
-  <form action="/campgrounds/<%= findID._id %>?_method=DELETE" method="POST">
-    <button type="submit">Delete</button>
-  </form>
-</footer>
+      <form
+        action="/campgrounds/<%= findID._id %>?_method=DELETE"
+        method="POST"
+      >
+        <button class="btn btn-danger mt-2" type="submit">Delete</button>
+      </form>
+    </footer>
+  </div>
+</div>
