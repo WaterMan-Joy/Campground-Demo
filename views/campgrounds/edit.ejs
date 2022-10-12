@@ -1,9 +1,9 @@
 <% layout('layouts/boilerplate') %>
-<h1>Edit Page</h1>
+<h1>수정 페이지</h1>
 
 <form action="/campgrounds/<%= findID._id %>?_method=PUT" method="POST">
   <div class="mb-3">
-    <label class="form-label" for="title">Title</label>
+    <label class="form-label" for="title">업체 이름</label>
     <input
       class="form-control"
       type="text"
@@ -14,7 +14,7 @@
     />
   </div>
   <div class="mb-3">
-    <label class="form-label" for="location">Location</label>
+    <label class="form-label" for="location">위치</label>
     <input
       class="form-control"
       type="text"
@@ -25,7 +25,7 @@
     />
   </div>
   <div class="mb-3">
-    <label class="form-label" for="price">Price</label>
+    <label class="form-label" for="price">가격</label>
     <input
       class="form-control"
       type="number"
@@ -36,7 +36,7 @@
     />
   </div>
   <div class="mb-3">
-    <label class="form-label" for="image">Image URL</label>
+    <label class="form-label" for="image">이미지 URL</label>
     <input
       class="form-control"
       type="text"
@@ -47,7 +47,7 @@
     />
   </div>
   <div class="mb-3">
-    <label class="form-label" for="description">Description</label>
+    <label class="form-label" for="description">상세정보</label>
     <textarea
       class="form-control"
       name="campground[description]"
@@ -59,7 +59,7 @@
     >
   </div>
   <div class="mb-3">
-    <button class="btn btn-primary" type="submit">Save</button>
+    <button class="btn btn-primary" type="submit">저장</button>
   </div>
 </form>
-<a href="/campgrounds/<%= findID._id %>">Cancel</a>
+<a href="/campgrounds/<%= findID._id %>">취소</a>

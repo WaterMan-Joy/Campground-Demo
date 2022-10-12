@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 
-<h1>Campground Index <a href="/campgrounds/new">Add Camp</a></h1>
+<h1>새로운 캠프 만들기 <a href="/campgrounds/new">클릭</a></h1>
 
 <div>
   <% for (let camp of campgrounds) { %>
@@ -17,7 +17,7 @@
             <small class="text-muted"> <%= camp.location %> </small>
           </p>
           <a class="btn btn-info" href="/campgrounds/<%= camp._id %>"
-            >Information</a
+            >정보보기</a
           >
         </div>
       </div>

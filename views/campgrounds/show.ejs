@@ -5,29 +5,29 @@
     <div class="card">
       <img class="img-thumbnail" src="<%= findID.image %> " alt="" />
       <div class="card-body">
-        <h5 class="card-title"><%= findID.title %></h5>
+        <h5 class="card-title">업체 - <%= findID.title %></h5>
         <p class="card-text"><%= findID.description %></p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><%= findID.location %></li>
-        <li class="list-group-item">$ <%= findID.price %></li>
+        <li class="list-group-item">위치 - <%= findID.location %></li>
+        <li class="list-group-item">$ <%= findID.price %> 원</li>
       </ul>
       <div class="card-body">
         <a
           class="card-link btn btn-warning"
           href="/campgrounds/<%= findID._id %>/edit"
-          >Edit</a
+          >수정</a
         >
         <form
           class="d-inline"
           action="/campgrounds/<%= findID._id %>?_method=DELETE"
           method="POST"
         >
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger">삭제</button>
         </form>
       </div>
       <div class="card-footer">
-        <a class="card-link" href="/campgrounds">All Campgrounds</a>
+        <a class="card-link" href="/campgrounds">모든 캠프 보기</a>
       </div>
     </div>
   </div>

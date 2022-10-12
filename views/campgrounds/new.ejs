@@ -4,7 +4,7 @@
   <div class="col-6 offset-3">
     <form action="/campgrounds" method="POST">
       <div class="mb-3">
-        <label class="form-label" for="title">Title</label>
+        <label class="form-label" for="title">업체 이름</label>
         <input
           class="form-control"
           type="text"
@@ -14,7 +14,7 @@
         />
       </div>
       <div class="mb-3">
-        <label class="form-label" for="location">Location</label>
+        <label class="form-label" for="location">위치</label>
         <input
           class="form-control"
           type="text"
@@ -24,21 +24,21 @@
         />
       </div>
       <div class="mb-3">
-        <label class="form-label" for="price">Price</label>
+        <label class="form-label" for="price">가격</label>
         <div class="input-group">
           <span class="input-group-text" id="price-label">$</span>
           <input
             type="number"
             name="campground[price]"
             id="price"
-            placeholder="0"
+            placeholder="원"
             aria-describedby="price-label"
           />
         </div>
       </div>
 
       <div class="mb-3">
-        <label class="form-label" for="image">Image URL</label>
+        <label class="form-label" for="image">이미지 URL</label>
         <input
           class="form-control"
           type="text"
@@ -48,7 +48,7 @@
         />
       </div>
       <div class="mb-3">
-        <label class="form-label" for="description">Description</label>
+        <label class="form-label" for="description">상세정보</label>
         <textarea
           class="form-control"
           name="campground[description]"
@@ -60,9 +60,9 @@
         </textarea>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary" type="submit">UpLoad</button>
+        <button class="btn btn-primary" type="submit">업로드</button>
       </div>
     </form>
-    <a href="/campgrounds">Cancel</a>
+    <a href="/campgrounds">취소</a>
   </div>
 </div>

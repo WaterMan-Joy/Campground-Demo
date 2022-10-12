@@ -5,6 +5,7 @@ const Campground = require('./models/campground')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
+const AppError = require('./AppError')
 
 const app = express()
 
@@ -74,6 +75,11 @@ app.delete('/campgrounds/:id', async (req, res) => {
     const { id } = req.params
     await Campground.findByIdAndDelete(id)
     res.redirect('/campgrounds')
+});
+
+app.use((err, req, res, next) => {
+    const { status = 500, message = "SOMETHING WORNG!!" } = err;
+    res.status(status).send(message);
 })
 
 
