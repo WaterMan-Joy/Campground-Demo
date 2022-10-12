@@ -31,11 +31,16 @@ app.get('/', (req, res) => {
     res.render('home')
 })
 
-app.get('/campgrounds', async (req, res) => {
-    const campgrounds = await Campground.find({})
-    res.render('campgrounds/index', {
-        campgrounds
-    })
+app.get('/campgrounds', async (req, res, next) => {
+    try {
+        const campgrounds = await Campground.find({})
+        res.render('campgrounds/index', {
+            campgrounds
+        })
+    }
+    catch (e) {
+        next(e);
+    }
 })
 
 app.get('/campgrounds/new', (req, res) => {
@@ -43,35 +48,52 @@ app.get('/campgrounds/new', (req, res) => {
 })
 
 app.get('/campgrounds/:id', async (req, res, next) => {
-    // const { id } = req.params
-    const findID = await Campground.findById(req.params.id)
-    if (!findID) {
-        next(new AppError('PRODUCT NOT FOUND!!', 404));
+    try {
+        const findID = await Campground.findById(req.params.id)
+        if (!findID) {
+            throw next(new AppError('CAMPGROUND NOT FOUND!!', 404));
+        }
+        res.render('campgrounds/show', {
+            findID
+        })
     }
-    res.render('campgrounds/show', {
-        findID
-    })
+    catch (e) {
+        next(e);
+    }
 })
 
-app.get('/campgrounds/:id/edit', async (req, res) => {
+app.get('/campgrounds/:id/edit', async (req, res, next) => {
     const findID = await Campground.findById(req.params.id)
-    console.log(findID)
+    if (!findID) {
+        return next(new AppError('EDIT NOT FOUND!!', 404))
+    }
     res.render('campgrounds/edit', {
         findID
     })
 })
 
-app.post('/campgrounds', async (req, res) => {
-    const campground = new Campground(req.body.campground)
-    console.log(campground)
-    await campground.save()
-    res.redirect(`/campgrounds/${campground._id}`)
+app.post('/campgrounds', async (req, res, next) => {
+    try {
+        const campground = new Campground(req.body.campground)
+        await campground.save()
+        res.redirect(`/campgrounds/${campground._id}`)
+    }
+    catch (e) {
+        console.log(e);
+        next(e);
+    }
 })
 
-app.put('/campgrounds/:id', async (req, res) => {
-    const { id } = req.params
-    const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, {new: true})
-    res.redirect(`/campgrounds/${newCamp._id}`)
+app.put('/campgrounds/:id', async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, {runValidators: true, new: true})
+        res.redirect(`/campgrounds/${newCamp._id}`)
+    }
+    catch (e) {
+        console.log(e);
+        next(e);
+    }
 })
 
 app.delete('/campgrounds/:id', async (req, res) => {
