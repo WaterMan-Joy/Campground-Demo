@@ -2,17 +2,60 @@
 <h1>Edit Page</h1>
 
 <form action="/campgrounds/<%= findID._id %>?_method=PUT" method="POST">
-  <input
-    type="text"
-    placeholder="<%= findID.title %> "
-    name="campground[title]"
-  />
-  <input
-    type="text"
-    placeholder="<%= findID.location %> "
-    name="campground[location]"
-  />
-  <button type="submit">Save</button>
+  <div class="mb-3">
+    <label class="form-label" for="title">Title</label>
+    <input
+      class="form-control"
+      type="text"
+      placeholder="<%= findID.title %> "
+      name="campground[title]"
+      id="title"
+    />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="location">Location</label>
+    <input
+      class="form-control"
+      type="text"
+      placeholder="<%= findID.location %> "
+      name="campground[location]"
+      id="location"
+    />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="price">Price</label>
+    <input
+      class="form-control"
+      type="number"
+      placeholder="<%= findID.price %> "
+      name="campground[price]"
+      id="price"
+    />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="image">Image URL</label>
+    <input
+      class="form-control"
+      type="text"
+      name="campground[image]"
+      id="image"
+      placeholder="<%= findID.image %> "
+    />
+  </div>
+  <div class="mb-3">
+    <label class="form-label" for="description">Description</label>
+    <textarea
+      class="form-control"
+      name="campground[description]"
+      id="description"
+      cols="40"
+      rows="5"
+    >
+    <%= findID.description %> 
+    </textarea>
+  </div>
+  <div class="mb-3">
+    <button class="btn btn-primary" type="submit">Save</button>
+  </div>
 </form>
-
 <a href="/campgrounds/<%= findID._id %>">Cancel</a>

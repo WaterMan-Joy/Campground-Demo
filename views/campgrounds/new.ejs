@@ -1,10 +1,68 @@
 <% layout('layouts/boilerplate') %>
-<h1>New</h1>
-<div>
-  <form action="/campgrounds" method="POST">
-    <input type="text" placeholder="title" name="campground[title]" />
-    <input type="text" placeholder="location" name="campground[location]" />
-    <button type="submit">BUTTON</button>
-  </form>
+<div class="row">
+  <h1 class="text-center">New</h1>
+  <div class="col-6 offset-3">
+    <form action="/campgrounds" method="POST">
+      <div class="mb-3">
+        <label class="form-label" for="title">Title</label>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="title"
+          name="campground[title]"
+          id="title"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="location">Location</label>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="location"
+          name="campground[location]"
+          id="location"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="price">Price</label>
+        <div class="input-group">
+          <span class="input-group-text" id="price-label">$</span>
+          <input
+            type="number"
+            name="campground[price]"
+            id="price"
+            placeholder="0"
+            aria-describedby="price-label"
+          />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label" for="image">Image URL</label>
+        <input
+          class="form-control"
+          type="text"
+          id="image"
+          placeholder="Image URL"
+          name="campground[image]"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="description">Description</label>
+        <textarea
+          class="form-control"
+          name="campground[description]"
+          id="description"
+          cols="40"
+          rows="5"
+          placeholder="Description"
+        >
+        </textarea>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-primary" type="submit">UpLoad</button>
+      </div>
+    </form>
+    <a href="/campgrounds">Cancel</a>
+  </div>
 </div>
-<a href="/campgrounds">Cancel</a>
