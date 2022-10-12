@@ -1,26 +1,34 @@
 <% layout('layouts/boilerplate') %>
-<div class="card">
-  <div class="card-body">
-    <h1>Name - <%= findID.title %></h1>
-    <h1>Location - <%= findID.location %></h1>
-    <img class="img-thumbnail" src="<%= findID.image %> " alt="" />
-    <h2>Price - <%= findID.price %></h2>
-    <span><%= findID.description %> </span>
 
-    <footer>
-      <a href="/campgrounds"
-        ><button class="btn btn-primary">All Campgrounds</button></a
-      >
-      <a href="/campgrounds/<%= findID._id %>/edit"
-        ><button class="btn btn-warning">Edit</button></a
-      >
-
-      <form
-        action="/campgrounds/<%= findID._id %>?_method=DELETE"
-        method="POST"
-      >
-        <button class="btn btn-danger mt-2" type="submit">Delete</button>
-      </form>
-    </footer>
+<div class="row">
+  <div class="col-6 offset-3">
+    <div class="card">
+      <img class="img-thumbnail" src="<%= findID.image %> " alt="" />
+      <div class="card-body">
+        <h5 class="card-title"><%= findID.title %></h5>
+        <p class="card-text"><%= findID.description %></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= findID.location %></li>
+        <li class="list-group-item">$ <%= findID.price %></li>
+      </ul>
+      <div class="card-body">
+        <a
+          class="card-link btn btn-warning"
+          href="/campgrounds/<%= findID._id %>/edit"
+          >Edit</a
+        >
+        <form
+          class="d-inline"
+          action="/campgrounds/<%= findID._id %>?_method=DELETE"
+          method="POST"
+        >
+          <button class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+      <div class="card-footer">
+        <a class="card-link" href="/campgrounds">All Campgrounds</a>
+      </div>
+    </div>
   </div>
 </div>

@@ -10,6 +10,7 @@
       placeholder="<%= findID.title %> "
       name="campground[title]"
       id="title"
+      value="<%= findID.title %>"
     />
   </div>
   <div class="mb-3">
@@ -20,6 +21,7 @@
       placeholder="<%= findID.location %> "
       name="campground[location]"
       id="location"
+      value="<%= findID.location %>"
     />
   </div>
   <div class="mb-3">
@@ -30,6 +32,7 @@
       placeholder="<%= findID.price %> "
       name="campground[price]"
       id="price"
+      value="<%= findID.price %>"
     />
   </div>
   <div class="mb-3">
@@ -39,7 +42,8 @@
       type="text"
       name="campground[image]"
       id="image"
-      placeholder="<%= findID.image %> "
+      placeholder="<%= findID.image %>"
+      value="<%= findID.image %>"
     />
   </div>
   <div class="mb-3">
@@ -51,8 +55,8 @@
       cols="40"
       rows="5"
     >
-    <%= findID.description %> 
-    </textarea>
+<%= findID.description %></textarea
+    >
   </div>
   <div class="mb-3">
     <button class="btn btn-primary" type="submit">Save</button>
