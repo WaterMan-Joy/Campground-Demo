@@ -63,13 +63,18 @@ app.get('/campgrounds/:id', async (req, res, next) => {
 })
 
 app.get('/campgrounds/:id/edit', async (req, res, next) => {
-    const findID = await Campground.findById(req.params.id)
-    if (!findID) {
-        return next(new AppError('EDIT NOT FOUND!!', 404))
+    try {
+        const findID = await Campground.findById(req.params.id)
+        if (!findID) {
+            throw next(new AppError('EDIT NOT FOUND!!', 404))
+        }
+        res.render('campgrounds/edit', {
+            findID
+        })
     }
-    res.render('campgrounds/edit', {
-        findID
-    })
+    catch (e) {
+        next(e);
+    }
 })
 
 app.post('/campgrounds', async (req, res, next) => {
