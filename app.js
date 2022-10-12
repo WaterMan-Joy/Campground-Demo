@@ -42,9 +42,12 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new')
 })
 
-app.get('/campgrounds/:id', async (req, res) => {
+app.get('/campgrounds/:id', async (req, res, next) => {
     // const { id } = req.params
     const findID = await Campground.findById(req.params.id)
+    if (!findID) {
+        next(new AppError('PRODUCT NOT FOUND!!', 404));
+    }
     res.render('campgrounds/show', {
         findID
     })
@@ -78,6 +81,9 @@ app.delete('/campgrounds/:id', async (req, res) => {
 });
 
 app.use((err, req, res, next) => {
+    console.log("****************************************")
+    console.log("*********************ERROR*******************")
+    console.log("****************************************")
     const { status = 500, message = "SOMETHING WORNG!!" } = err;
     res.status(status).send(message);
 })
