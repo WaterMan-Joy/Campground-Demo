@@ -27,6 +27,12 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(morgan('dev'))
 
+function warpAsync(fn) {
+    return function (req, res, next) {
+        fn(req, res, next).catch(e => next(e));
+    }
+}
+
 app.get('/', (req, res) => {
     res.render('home')
 })
@@ -47,20 +53,15 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new')
 })
 
-app.get('/campgrounds/:id', async (req, res, next) => {
-    try {
-        const findID = await Campground.findById(req.params.id)
-        if (!findID) {
-            throw next(new AppError('CAMPGROUND NOT FOUND!!', 404));
-        }
-        res.render('campgrounds/show', {
-            findID
-        })
+app.get('/campgrounds/:id', warpAsync(async (req, res, next) => {
+    const findID = await Campground.findById(req.params.id)
+    if (!findID) {
+        throw next(new AppError('CAMPGROUND NOT FOUND!!', 404));
     }
-    catch (e) {
-        next(e);
-    }
-})
+    res.render('campgrounds/show', {
+        findID
+    })
+}))
 
 app.get('/campgrounds/:id/edit', async (req, res, next) => {
     try {
