@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const CampgroundSchema = new Schema({
     title: {
         type: String,
-        required: true,
+        required: [true, "CAN NOT FOUND TITLE"],
     },
     image: {
         type: String,

@@ -2,7 +2,12 @@
 <div class="row">
   <h1 class="text-center">New</h1>
   <div class="col-6 offset-3">
-    <form action="/campgrounds" method="POST">
+    <form
+      action="/campgrounds"
+      method="POST"
+      novalidate
+      class="needs-validation"
+    >
       <div class="mb-3">
         <label class="form-label" for="title">업체 이름</label>
         <input
@@ -11,7 +16,9 @@
           placeholder="title"
           name="campground[title]"
           id="title"
+          required
         />
+        <div class="valid-feedback">이름 가능합니다</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">위치</label>
@@ -21,19 +28,24 @@
           placeholder="location"
           name="campground[location]"
           id="location"
+          required
         />
+        <div class="valid-feedback">위치 가능합니다</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="price">가격</label>
         <div class="input-group">
           <span class="input-group-text" id="price-label">$</span>
           <input
+            class="form-control"
             type="number"
             name="campground[price]"
             id="price"
             placeholder="원"
             aria-describedby="price-label"
+            required
           />
+          <div class="valid-feedback">가격 가능합니다</div>
         </div>
       </div>
 
@@ -45,7 +57,9 @@
           id="image"
           placeholder="Image URL"
           name="campground[image]"
+          required
         />
+        <div class="valid-feedback">이미지 가능합니다</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="description">상세정보</label>
@@ -56,7 +70,9 @@
           cols="40"
           rows="5"
           placeholder="Description"
+          required
         ></textarea>
+        <div class="valid-feedback">상세정보 가능합니다</div>
       </div>
       <div class="mb-3">
         <button class="btn btn-primary" type="submit">업로드</button>

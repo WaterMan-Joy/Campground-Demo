@@ -1,8 +1,13 @@
 <% layout('layouts/boilerplate') %>
 <h1>수정 페이지</h1>
 
-<form action="/campgrounds/<%= findID._id %>?_method=PUT" method="POST">
-  <div class="mb-3">
+<form
+  action="/campgrounds/<%= findID._id %>?_method=PUT"
+  method="POST"
+  novalidate
+  class="needs-validation"
+>
+  <div class="mb-3 needs-validation">
     <label class="form-label" for="title">업체 이름</label>
     <input
       class="form-control"
@@ -11,7 +16,9 @@
       name="campground[title]"
       id="title"
       value="<%= findID.title %>"
+      required
     />
+    <div class="valid-feedback">이름 가능합니다</div>
   </div>
   <div class="mb-3">
     <label class="form-label" for="location">위치</label>
@@ -22,7 +29,9 @@
       name="campground[location]"
       id="location"
       value="<%= findID.location %>"
+      required
     />
+    <div class="valid-feedback">위치 가능합니다</div>
   </div>
   <div class="mb-3">
     <label class="form-label" for="price">가격</label>
@@ -33,7 +42,9 @@
       name="campground[price]"
       id="price"
       value="<%= findID.price %>"
+      required
     />
+    <div class="valid-feedback">가격 가능합니다</div>
   </div>
   <div class="mb-3">
     <label class="form-label" for="image">이미지 URL</label>
@@ -44,7 +55,9 @@
       id="image"
       placeholder="<%= findID.image %>"
       value="<%= findID.image %>"
+      required
     />
+    <div class="valid-feedback">이미지 가능합니다</div>
   </div>
   <div class="mb-3">
     <label class="form-label" for="description">상세정보</label>
@@ -54,9 +67,11 @@
       id="description"
       cols="40"
       rows="5"
+      required
     >
 <%= findID.description %></textarea
     >
+    <div class="valid-feedback">상세정보 가능합니다</div>
   </div>
   <div class="mb-3">
     <button class="btn btn-primary" type="submit">저장</button>

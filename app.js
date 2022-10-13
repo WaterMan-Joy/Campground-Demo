@@ -89,6 +89,17 @@ app.delete('/campgrounds/:id', async (req, res) => {
     res.redirect('/campgrounds')
 });
 
+const handleValidationError = (err) => {
+    console.dir(err);
+    return new AppError(`VALIATION FAILED...${err.message}`, 400)
+}
+
+app.use((err, req, res, next) => {
+    console.log(err.name);
+    if (err === "ValidationError") err = handleValidationError(err);
+    next(err);
+})
+
 app.use((err, req, res, next) => {
     console.log("****************************************")
     console.log("*********************ERROR*******************")
