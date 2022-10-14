@@ -28,14 +28,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(morgan('dev'))
 
-function warpAsync(fn) {
-    return function (req, res, next) {
-        fn(req, res, next).catch((e) => {
-            console.log(e);
-            next(e);
-        });
-    }
-}
 
 app.get('/', (req, res) => {
     res.render('home')
@@ -73,13 +65,13 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res, next) => {
 }))
 
 app.post('/campgrounds', catchAsync(async (req, res, next) => {
-    if (!req.body.campground) throw new ExpressError('Not Found data', 400)
+    if (!req.body.campground) throw new ExpressError('Not Found Campground Data', 400)
         const campground = new Campground(req.body.campground)
         await campground.save()
         res.redirect(`/campgrounds/${campground._id}`)
 }))
 
-app.put('/campgrounds/:id', warpAsync(async (req, res, next) => {
+app.put('/campgrounds/:id', catchAsync(async (req, res, next) => {
     const { id } = req.params
     const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, {runValidators: true, new: true})
     res.redirect(`/campgrounds/${newCamp._id}`)
@@ -107,7 +99,9 @@ app.use((err, req, res, next) => {
     console.log(err.name);
     if (err.name === "Error" || err.name === "CastError" || err.name ==='ValidationError') err = handleError(err);
     const { status = 500, message = "SOMETHING WORNG!!" } = err;
-    res.status(status).send(message);
+    res.status(status).render('error', {
+        status, message, err
+    })
 })
 
 
