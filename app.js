@@ -5,7 +5,8 @@ const Campground = require('./models/campground')
 const methodOverride = require('method-override')
 const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
-const AppError = require('./AppError')
+const ExpressError = require('./utils/ExpressError')
+const catchAsync = require('./utils/catchAsync');
 
 const app = express()
 
@@ -40,7 +41,7 @@ app.get('/', (req, res) => {
     res.render('home')
 })
 
-app.get('/campgrounds', warpAsync(async (req, res, next) => {
+app.get('/campgrounds', catchAsync(async (req, res, next) => {
     const campgrounds = await Campground.find({})
     res.render('campgrounds/index', {
         campgrounds
@@ -51,27 +52,28 @@ app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new')
 })
 
-app.get('/campgrounds/:id', warpAsync(async (req, res, next) => {
+app.get('/campgrounds/:id', catchAsync(async (req, res, next) => {
     const findID = await Campground.findById(req.params.id)
     if (!findID) {
-        throw next(new AppError('CAMPGROUND NOT FOUND!!', 404));
+        throw next(new ExpressError('CAMPGROUND NOT FOUND!!', 404));
     }
     res.render('campgrounds/show', {
         findID
     })
 }))
 
-app.get('/campgrounds/:id/edit', warpAsync(async (req, res, next) => {
+app.get('/campgrounds/:id/edit', catchAsync(async (req, res, next) => {
     const findID = await Campground.findById(req.params.id)
     if (!findID) {
-        throw next(new AppError('EDIT NOT FOUND!!', 404))
+        throw next(new ExpressError('EDIT NOT FOUND!!', 404))
     }
     res.render('campgrounds/edit', {
         findID
     })
 }))
 
-app.post('/campgrounds', warpAsync(async (req, res, next) => {
+app.post('/campgrounds', catchAsync(async (req, res, next) => {
+    if (!req.body.campground) throw new ExpressError('Not Found data', 400)
         const campground = new Campground(req.body.campground)
         await campground.save()
         res.redirect(`/campgrounds/${campground._id}`)
@@ -89,21 +91,21 @@ app.delete('/campgrounds/:id', async (req, res) => {
     res.redirect('/campgrounds')
 });
 
-const handleValidationError = (err) => {
+const handleError = (err) => {
     console.dir(err);
-    return new AppError(`VALIATION FAILED...${err.message}`, 400)
+    return new ExpressError(`${err.name} FAILED...${err.message}, ${err.status}`, 400)
 }
 
-app.use((err, req, res, next) => {
-    console.log(err.name);
-    if (err === "ValidationError") err = handleValidationError(err);
-    next(err);
+app.all('*', (req, res, next) => {
+    next(new ExpressError('PAGE NOT FOUND!!', 404))
 })
 
 app.use((err, req, res, next) => {
     console.log("****************************************")
-    console.log("*********************ERROR*******************")
+    console.log("*********************ERROR**************")
     console.log("****************************************")
+    console.log(err.name);
+    if (err.name === "Error" || err.name === "CastError" || err.name ==='ValidationError') err = handleError(err);
     const { status = 500, message = "SOMETHING WORNG!!" } = err;
     res.status(status).send(message);
 })
