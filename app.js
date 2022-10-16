@@ -65,14 +65,14 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res, next) => {
     })
 }))
 
-app.post('/campgrounds', catchAsync(async (req, res, next) => {
-    // if (!req.body.campground) throw new ExpressError('Not Found Campground Data', 400)
+const validateCampground = (req, res, next) => {
     const campgroundSchema = Joi.object({
         campground: Joi.object({
             title: Joi.string().required(),
             price: Joi.number().required().min(0),
             image: Joi.string().required(),
             location: Joi.string().required(),
+            description: Joi.string().required(),
         }).required()
     })
     const { error } = campgroundSchema.validate(req.body);
@@ -80,13 +80,19 @@ app.post('/campgrounds', catchAsync(async (req, res, next) => {
         const msg = error.details.map(el => el.message).join(',');
         throw new ExpressError(msg, 400);
     }
-    console.log(error);
+    else {
+        next();
+    }
+}
+
+app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
+    // if (!req.body.campground) throw new ExpressError('Not Found Campground Data', 400)
         const campground = new Campground(req.body.campground)
         await campground.save()
         res.redirect(`/campgrounds/${campground._id}`)
 }))
 
-app.put('/campgrounds/:id', catchAsync(async (req, res, next) => {
+app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res, next) => {
     const { id } = req.params
     const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, {runValidators: true, new: true})
     res.redirect(`/campgrounds/${newCamp._id}`)
