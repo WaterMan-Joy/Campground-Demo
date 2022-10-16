@@ -7,6 +7,7 @@ const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
 const ExpressError = require('./utils/ExpressError')
 const catchAsync = require('./utils/catchAsync');
+const Joi = require('joi');
 
 const app = express()
 
@@ -65,7 +66,21 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res, next) => {
 }))
 
 app.post('/campgrounds', catchAsync(async (req, res, next) => {
-    if (!req.body.campground) throw new ExpressError('Not Found Campground Data', 400)
+    // if (!req.body.campground) throw new ExpressError('Not Found Campground Data', 400)
+    const campgroundSchema = Joi.object({
+        campground: Joi.object({
+            title: Joi.string().required(),
+            price: Joi.number().required().min(0),
+            image: Joi.string().required(),
+            location: Joi.string().required(),
+        }).required()
+    })
+    const { error } = campgroundSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    }
+    console.log(error);
         const campground = new Campground(req.body.campground)
         await campground.save()
         res.redirect(`/campgrounds/${campground._id}`)
