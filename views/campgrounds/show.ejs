@@ -30,5 +30,38 @@
         <a class="card-link" href="/campgrounds">모든 캠프 보기</a>
       </div>
     </div>
+    <h2>댓글 달기</h2>
+    <form
+      action="/campgrounds/<%=findID._id%>/reviews"
+      method="POST"
+      class="mb-3 validated-form needs-validation"
+      novalidate
+    >
+      <div class="mb-3">
+        <label class="form-label" for="rating">점수</label>
+        <input
+          class="form-range"
+          type="range"
+          min="1"
+          max="5"
+          name="review[rating]"
+          id="rating"
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="body">댓글</label>
+        <textarea
+          class="form-control"
+          name="review[body]"
+          id="body"
+          cols="30"
+          rows="3"
+          placeholder="댓글달기"
+          required
+        ></textarea>
+        <div class="valid-feedback">댓글달기</div>
+      </div>
+      <button type="submit" class="btn btn-success">댓글달기</button>
+    </form>
   </div>
 </div>

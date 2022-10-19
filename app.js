@@ -2,12 +2,12 @@ const express = require('express')
 const mongoose = require('mongoose')
 const path = require('path')
 const Campground = require('./models/campground')
+const Review = require('./models/review');
 const methodOverride = require('method-override')
 const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
 const ExpressError = require('./utils/ExpressError')
 const catchAsync = require('./utils/catchAsync');
-const Joi = require('joi');
 const { campgroundSchema } = require('./schemas');
 
 const app = express()
@@ -41,10 +41,12 @@ const validateCampground = (req, res, next) => {
     }
 }
 
+// TODO: GET
 app.get('/', (req, res) => {
     res.render('home')
 })
 
+// TODO: GET
 app.get('/campgrounds', catchAsync(async (req, res, next) => {
     const campgrounds = await Campground.find({})
     res.render('campgrounds/index', {
@@ -52,20 +54,23 @@ app.get('/campgrounds', catchAsync(async (req, res, next) => {
     })
 }))
 
+// TODO: GET
 app.get('/campgrounds/new', (req, res) => {
     res.render('campgrounds/new')
 })
 
+// TODO: GET
 app.get('/campgrounds/:id', catchAsync(async (req, res, next) => {
     const findID = await Campground.findById(req.params.id)
     if (!findID) {
-        throw next(new ExpressError('CAMPGROUND NOT FOUND!!', 404));
+        throw next(new ExpressError('NOT FOUND CAMPGROUND ID!!', 404));
     }
     res.render('campgrounds/show', {
         findID
     })
 }))
 
+// TODO: GET
 app.get('/campgrounds/:id/edit', catchAsync(async (req, res, next) => {
     const findID = await Campground.findById(req.params.id)
     if (!findID) {
@@ -77,34 +82,50 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res, next) => {
 }))
 
 
+// TODO: CAMPGROUND POST
 app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
     // if (!req.body.campground) throw new ExpressError('Not Found Campground Data', 400)
-        const campground = new Campground(req.body.campground)
-        await campground.save()
-        res.redirect(`/campgrounds/${campground._id}`)
+    const campground = new Campground(req.body.campground)
+    await campground.save()
+    res.redirect(`/campgrounds/${campground._id}`)
 }))
 
+// TODO: CAMPGROUND PUT
 app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res, next) => {
     const { id } = req.params
     const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, {runValidators: true, new: true})
     res.redirect(`/campgrounds/${newCamp._id}`)
 }))
 
+// TODO: CAMPGROUND DELETE
 app.delete('/campgrounds/:id', async (req, res) => {
     const { id } = req.params
     await Campground.findByIdAndDelete(id)
     res.redirect('/campgrounds')
 });
 
+// TODO: REVIEW POST
+app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
+    const findID = await Campground.findById(req.params.id)
+    const review = new Review(req.body.review);
+    findID.reviews.push(review);
+    await review.save();
+    console.log(review)
+    await findID.save();
+    res.redirect(`/campgrounds/${findID._id}`);
+}))
+
 const handleError = (err) => {
     console.dir(err);
-    return new ExpressError(`${err.name} FAILED...${err.message}, ${err.status}`, 400)
+    return new ExpressError(`ERR NAME - ${err.name}, ERR MESSAGE - ${err.message}, ERR STATUS - ${err.status}, DEFAULT ERR STATUS - `, 400)
 }
 
+// TODO: OTHER ERROR
 app.all('*', (req, res, next) => {
     next(new ExpressError('PAGE NOT FOUND!!', 404))
 })
 
+// TODO: ERROR
 app.use((err, req, res, next) => {
     console.log("****************************************")
     console.log("*********************ERROR**************")
