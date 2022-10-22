@@ -72,14 +72,12 @@ app.get('/campgrounds/new', (req, res) => {
 
 // TODO: GET
 app.get('/campgrounds/:id', catchAsync(async (req, res, next) => {
-    const findID = await Campground.findById(req.params.id)
-    const reviews = await Review.find({});
+    const findID = await Campground.findById(req.params.id).populate('reviews')
     if (!findID) {
         throw next(new ExpressError('NOT FOUND CAMPGROUND ID!!', 404));
     }
     res.render('campgrounds/show', {
         findID,
-        reviews,
     })
 }))
 
@@ -96,7 +94,7 @@ app.get('/campgrounds/:id/edit', catchAsync(async (req, res, next) => {
 
 
 // TODO: CAMPGROUND POST
-app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) => {
+app.post('/campgrounds', validateCampground, catchAsync(async (req, res) => {
     // if (!req.body.campground) throw new ExpressError('Not Found Campground Data', 400)
     const campground = new Campground(req.body.campground)
     await campground.save()
@@ -104,18 +102,33 @@ app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) =
 }))
 
 // TODO: CAMPGROUND PUT
-app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res, next) => {
+app.put('/campgrounds/:id', validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params
     const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, {runValidators: true, new: true})
     res.redirect(`/campgrounds/${newCamp._id}`)
 }))
 
+// TODO: DELETE REVIEWS IN CMAPGROUND
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async (req, res) => {
+    const { id, reviewId } = req.params;
+    console.log(`${id}-------${reviewId}`);
+    await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.redirect(`/campgrounds/${id}`);
+}))
+
 // TODO: CAMPGROUND DELETE
-app.delete('/campgrounds/:id', async (req, res) => {
+app.delete('/campgrounds/:id', catchAsync(async (req, res) => {
     const { id } = req.params
-    await Campground.findByIdAndDelete(id)
-    res.redirect('/campgrounds')
-});
+    const findID = await Campground.findById(id);
+    if (!findID) {
+        throw new ExpressError('Delete Failed!', 400);
+    }
+    else {
+        await Campground.findByIdAndDelete(id)
+        res.redirect('/campgrounds')
+    }
+}));
 
 // TODO: REVIEW POST
 app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res) => {
@@ -129,7 +142,7 @@ app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res)
 }))
 
 const handleError = (err) => {
-    console.log(err);
+    console.dir(err);
     return new ExpressError(`ERR NAME - ${err.name}, ERR MESSAGE - ${err.message}, ERR STATUS - ${err.status}, DEFAULT ERR STATUS - `, 400)
 }
 

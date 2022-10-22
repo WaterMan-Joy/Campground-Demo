@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="row">
-  <div class="col-10 offset-1">
+  <div class="col-6">
     <div class="card">
       <img class="img-thumbnail" src="<%= findID.image %> " alt="" />
       <div class="card-body">
@@ -30,6 +30,8 @@
         <a class="card-link" href="/campgrounds">모든 캠프 보기</a>
       </div>
     </div>
+  </div>
+  <div class="col-6">
     <h2>댓글 달기</h2>
     <form
       action="/campgrounds/<%=findID._id%>/reviews"
@@ -63,9 +65,26 @@
       </div>
       <button type="submit" class="btn btn-success">댓글달기</button>
     </form>
-    <div>
-      <% for (let review of reviews) { %>
-      <div><%= review.body %> <%= review.rating %>점</div>
+
+    <div class="list-group">
+      <% for (let review of findID.reviews) { %>
+      <div
+        class="list-group-item d-flex justify-content-between align-items-start"
+      >
+        <div class="ms-2 me-auto">
+          <div class="fw-bold"><%= review._id %></div>
+          <%= review.body %>
+        </div>
+        <span class="badge bg-primary rounded-pill"
+          ><%= review.rating %> 점
+        </span>
+        <form
+          action="/campgrounds/<%=findID._id%>/reviews/<%=review._id%>?_method=DELETE"
+          method="POST"
+        >
+          <button class="btn">삭제</button>
+        </form>
+      </div>
       <% } %>
     </div>
   </div>
