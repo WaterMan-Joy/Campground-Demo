@@ -63,5 +63,10 @@
       </div>
       <button type="submit" class="btn btn-success">댓글달기</button>
     </form>
+    <div>
+      <% for (let review of reviews) { %>
+      <div><%= review.body %> <%= review.rating %>점</div>
+      <% } %>
+    </div>
   </div>
 </div>

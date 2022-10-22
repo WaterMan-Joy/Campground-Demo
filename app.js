@@ -8,7 +8,7 @@ const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
 const ExpressError = require('./utils/ExpressError')
 const catchAsync = require('./utils/catchAsync');
-const { campgroundSchema } = require('./schemas');
+const { campgroundSchema, reviewSchema } = require('./schemas');
 
 const app = express()
 
@@ -41,6 +41,17 @@ const validateCampground = (req, res, next) => {
     }
 }
 
+const validateReview = (req, res, next) => {
+    const { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',');
+        throw new ExpressError(msg, 400);
+    }
+    else {
+        next();
+    }
+}
+
 // TODO: GET
 app.get('/', (req, res) => {
     res.render('home')
@@ -62,11 +73,13 @@ app.get('/campgrounds/new', (req, res) => {
 // TODO: GET
 app.get('/campgrounds/:id', catchAsync(async (req, res, next) => {
     const findID = await Campground.findById(req.params.id)
+    const reviews = await Review.find({});
     if (!findID) {
         throw next(new ExpressError('NOT FOUND CAMPGROUND ID!!', 404));
     }
     res.render('campgrounds/show', {
-        findID
+        findID,
+        reviews,
     })
 }))
 
@@ -105,7 +118,7 @@ app.delete('/campgrounds/:id', async (req, res) => {
 });
 
 // TODO: REVIEW POST
-app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
+app.post('/campgrounds/:id/reviews', validateReview, catchAsync(async (req, res) => {
     const findID = await Campground.findById(req.params.id)
     const review = new Review(req.body.review);
     findID.reviews.push(review);
@@ -116,7 +129,7 @@ app.post('/campgrounds/:id/reviews', catchAsync(async (req, res) => {
 }))
 
 const handleError = (err) => {
-    console.dir(err);
+    console.log(err);
     return new ExpressError(`ERR NAME - ${err.name}, ERR MESSAGE - ${err.message}, ERR STATUS - ${err.status}, DEFAULT ERR STATUS - `, 400)
 }
 
