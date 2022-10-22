@@ -31,10 +31,20 @@ const CampgroundSchema = new Schema({
     ]
 })
 
-CampgroundSchema.post('findOneAndDelete', async function (camp) {
-    if (camp.reviews.length) {
-        const deleteReview = await Review.deleteMany({ _id: { $in: camp.reviews } });
-        console.log(deleteReview);
+// CampgroundSchema.post('findOneAndDelete', async function (camp) {
+//     if (camp.reviews.length) {
+//         const deleteReview = await Review.deleteMany({ _id: { $in: camp.reviews } });
+//         console.log(deleteReview);
+//     }
+// })
+
+CampgroundSchema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
+        await Review.deleteMany({
+            _id: {
+                $in: doc.reviews
+            }
+        })
     }
 })
 
