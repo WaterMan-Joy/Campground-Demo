@@ -6,6 +6,7 @@ const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
 const ExpressError = require('./utils/ExpressError')
 const campgrounds = require('./routes/campgrounds');
+const reviews = require('./routes/reviews');
 
 const app = express()
 
@@ -30,6 +31,8 @@ app.use(morgan('dev'))
 
 
 app.use('/campgrounds', campgrounds);
+app.use('/campgrounds/:id/reviews', reviews);
+
 
 // TODO: GET
 app.get('/', (req, res) => {
