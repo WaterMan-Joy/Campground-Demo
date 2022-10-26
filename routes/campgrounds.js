@@ -41,7 +41,8 @@ router.get('/new', (req, res) => {
 router.get('/:id', catchAsync(async (req, res, next) => {
     const findID = await Campground.findById(req.params.id).populate('reviews')
     if (!findID) {
-        throw next(new ExpressError('NOT FOUND CAMPGROUND ID!!', 404));
+        req.flash('error', '캠프를 찾을 수 없습니다')
+        res.redirect('/campgrounds');
     }
     res.render('campgrounds/show', {
         findID,
@@ -52,7 +53,8 @@ router.get('/:id', catchAsync(async (req, res, next) => {
 router.get('/:id/edit', catchAsync(async (req, res, next) => {
     const findID = await Campground.findById(req.params.id)
     if (!findID) {
-        throw next(new ExpressError('EDIT NOT FOUND!!', 404))
+        req.flash('error', '캠프를 찾을 수 없습니다')
+        res.redirect('/campgrounds');
     }
     res.render('campgrounds/edit', {
         findID
@@ -84,8 +86,8 @@ router.delete('/:id', catchAsync(async (req, res) => {
     }
     else {
         await Campground.findByIdAndDelete(id)
+        req.flash('success', '캠프가 삭제되었습니다');
         res.redirect('/campgrounds')
-        res.flash('success', '캠프가 삭제되었습니다');
     }
 }));
 
