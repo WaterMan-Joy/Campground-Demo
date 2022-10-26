@@ -61,10 +61,11 @@ router.get('/:id/edit', catchAsync(async (req, res, next) => {
 
 // TODO: POST CAMPGROUND
 router.post('/', validateCampground, catchAsync(async (req, res) => {
-    // if (!req.body.campground) throw new ExpressError('Not Found Campground Data', 400)
     const campground = new Campground(req.body.campground)
     await campground.save()
+    req.flash('success', '새로운 캠프가 등록되었습니다')
     res.redirect(`/campgrounds/${campground._id}`)
+    
 }))
 
 // TODO: PUT CAMPGROUND

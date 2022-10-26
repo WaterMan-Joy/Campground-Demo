@@ -5,6 +5,7 @@ const methodOverride = require('method-override')
 const morgan = require('morgan')
 const ejsMate = require('ejs-mate')
 const session = require('express-session');
+const flash = require('connect-flash');
 
 const ExpressError = require('./utils/ExpressError')
 const campgrounds = require('./routes/campgrounds');
@@ -30,10 +31,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
 app.use(morgan('dev'))
 
-app.use('/campgrounds', campgrounds);
-app.use('/campgrounds/:id/reviews', reviews);
-app.use(express.static(path.join(__dirname, 'public')));
-
 app.use(session({
     secret: 'thisismykey',
     resave: false,
@@ -43,6 +40,16 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24 * 7,
     }
 }))
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.success = req.flash('success');
+    next();
+})
+
+app.use('/campgrounds', campgrounds);
+app.use('/campgrounds/:id/reviews', reviews);
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 
 // TODO: GET
