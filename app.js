@@ -1,13 +1,14 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const path = require('path')
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
 const methodOverride = require('method-override')
-const morgan = require('morgan')
-const ejsMate = require('ejs-mate')
+const morgan = require('morgan');
+const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-const ExpressError = require('./utils/ExpressError')
+const ExpressError = require('./utils/ExpressError');
+
 const campgrounds = require('./routes/campgrounds');
 const reviews = require('./routes/reviews');
 

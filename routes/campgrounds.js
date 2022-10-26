@@ -65,13 +65,13 @@ router.post('/', validateCampground, catchAsync(async (req, res) => {
     await campground.save()
     req.flash('success', '새로운 캠프가 등록되었습니다')
     res.redirect(`/campgrounds/${campground._id}`)
-    
 }))
 
 // TODO: PUT CAMPGROUND
 router.put('/:id', validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params
-    const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, {runValidators: true, new: true})
+    const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true, new: true })
+    req.flash('success', '캠프가 수정 되었습니다')
     res.redirect(`/campgrounds/${newCamp._id}`)
 }))
 
@@ -85,6 +85,7 @@ router.delete('/:id', catchAsync(async (req, res) => {
     else {
         await Campground.findByIdAndDelete(id)
         res.redirect('/campgrounds')
+        res.flash('success', '캠프가 삭제되었습니다');
     }
 }));
 

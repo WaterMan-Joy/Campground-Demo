@@ -29,6 +29,7 @@ router.post('/', validateReview, catchAsync(async (req, res) => {
     await review.save();
     console.log(review)
     await findID.save();
+    req.flash('success', '댓글 등록 완료');
     res.redirect(`/campgrounds/${findID._id}`);
 }))
 // TODO: DELETE REVIEWS IN CMAPGROUND
@@ -37,6 +38,7 @@ router.delete('/:reviewId', catchAsync(async (req, res) => {
     console.log(`${id}-------${reviewId}`);
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
+    req.flash('success', '댓글 삭제 완료');
     res.redirect(`/campgrounds/${id}`);
 }))
 
