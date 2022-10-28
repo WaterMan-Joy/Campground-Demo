@@ -8,6 +8,7 @@ const Campground = require('../models/campground')
 const Review = require('../models/review');
 
 const { reviewSchema } = require('../schemas');
+const { isLoggedIn } = require('../middleware');
 
 
 const validateReview = (req, res, next) => {
@@ -22,7 +23,7 @@ const validateReview = (req, res, next) => {
 }
 
 // TODO: POST REVIEW
-router.post('/', validateReview, catchAsync(async (req, res) => {
+router.post('/', isLoggedIn, validateReview, catchAsync(async (req, res) => {
     const findID = await Campground.findById(req.params.id)
     const review = new Review(req.body.review);
     findID.reviews.push(review);
@@ -33,7 +34,7 @@ router.post('/', validateReview, catchAsync(async (req, res) => {
     res.redirect(`/campgrounds/${findID._id}`);
 }))
 // TODO: DELETE REVIEWS IN CMAPGROUND
-router.delete('/:reviewId', catchAsync(async (req, res) => {
+router.delete('/:reviewId', isLoggedIn, catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     console.log(`${id}-------${reviewId}`);
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });

@@ -16,10 +16,25 @@ router.get('/login', (req, res) => {
     res.render('users/login');
 })
 
+
+// TODO: POST LOGINT
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login'}), (req, res) => {
     req.flash('success', '로그인이 되었습니다');
     res.redirect('/campgrounds');
 });
+
+// // TODO: LOGOUT FIXME:
+router.get('/logout', catchAsync(async (req, res) => {
+    req.logout(function (err) {
+      if (err) {
+        req.flash('error', '로그인에 실패하였습니다');
+        return res.redirect('/campgrounds');
+      }
+      req.flash('success', '로그아웃 되었습니다');
+      res.redirect('/campgrounds');
+    });
+  }));
+
 
 // TODO: POST REGISTER
 router.post('/register', catchAsync(async (req, res) => {
