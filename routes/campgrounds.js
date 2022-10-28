@@ -25,7 +25,7 @@ const validateCampground = (req, res, next) => {
 
 
 // TODO: GET
-router.get('/', catchAsync(async (req, res, next) => {
+router.get('/', catchAsync(async (req, res) => {
     const campgrounds = await Campground.find({})
     res.render('campgrounds/index', {
         campgrounds
@@ -38,7 +38,7 @@ router.get('/new', (req, res) => {
 })
 
 // TODO: GET
-router.get('/:id', catchAsync(async (req, res, next) => {
+router.get('/:id', catchAsync(async (req, res) => {
     const findID = await Campground.findById(req.params.id).populate('reviews')
     if (!findID) {
         req.flash('error', '캠프를 찾을 수 없습니다')
@@ -50,10 +50,10 @@ router.get('/:id', catchAsync(async (req, res, next) => {
 }))
 
 // TODO: GET
-router.get('/:id/edit', catchAsync(async (req, res, next) => {
+router.get('/:id/edit', catchAsync(async (req, res) => {
     const findID = await Campground.findById(req.params.id)
     if (!findID) {
-        req.flash('error', '캠프를 찾을 수 없습니다')
+        req.flash('error', '수정할 캠프를 찾을 수 없습니다')
         res.redirect('/campgrounds');
     }
     res.render('campgrounds/edit', {
