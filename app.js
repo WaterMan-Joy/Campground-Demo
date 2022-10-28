@@ -58,22 +58,22 @@ app.use((req, res, next) => {
     next();
 })
 
+app.get('/fakeUser', async (req, res) => {
+    const user = new User({ email: 'sumkim93@gmail.com', username: 'Joy' });
+    console.log(user)
+    const newUser = await User.register(user, 'chicken');
+    console.log(newUser)
+    res.send(`${newUser} ******** ${user}`);
+})
 app.use('/campgrounds', campgrounds);
 app.use('/campgrounds/:id/reviews', reviews);
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-app.get('/fakeuser', async (req, res) => {
-    const user = new User({ email: 'sumkim93@gmail.com', username: 'Joy' });
-    User.register(user, 'chicken');
-})
 
 
 // TODO: GET
 app.get('/', (req, res) => {
     res.render('home')
 })
-
 
 
 const handleError = (err) => {
