@@ -83,7 +83,9 @@ router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params
     const findID = await Campground.findById(id);
     if (!findID) {
-        throw new ExpressError('Delete Failed!', 400);
+        req.flash('error', '캠프를 삭제하지 못했습니다');
+        return res.redirect('/campgrounds')
+        // throw new ExpressError('삭제하지 못했습니다!', 400);
     }
     else {
         await Campground.findByIdAndDelete(id)
