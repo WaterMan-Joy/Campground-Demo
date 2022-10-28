@@ -34,6 +34,10 @@ router.get('/', catchAsync(async (req, res) => {
 
 // TODO: GET
 router.get('/new', (req, res) => {
+    if (!req.isAuthenticated()) {
+        req.flash('error', '다시 로그인 하십시요');
+        return res.redirect('/login');
+    }
     res.render('campgrounds/new')
 })
 
