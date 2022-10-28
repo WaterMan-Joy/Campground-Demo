@@ -18,10 +18,13 @@
         <a class="nav-link" href="/campgrounds">캠프 정보보기</a>
         <a class="nav-link" href="/campgrounds/new">캠프 만들기</a>
       </div>
-      <div class="navbar-nav ml-auto">
+      <div class="navbar-nav">
+        <% if (!currentUser) {%>
         <a class="nav-link" href="/register">회원 가입</a>
         <a class="nav-link" href="/login">로그인</a>
+        <% } else {%>
         <a class="nav-link" href="/logout">로그 아웃</a>
+        <% } %>
       </div>
     </div>
   </div>

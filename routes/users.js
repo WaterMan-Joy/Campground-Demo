@@ -23,7 +23,7 @@ router.post('/login', passport.authenticate('local', { failureFlash: true, failu
     res.redirect('/campgrounds');
 });
 
-// // TODO: LOGOUT FIXME:
+// // TODO: LOGOUT
 router.get('/logout', catchAsync(async (req, res) => {
     req.logout(function (err) {
       if (err) {
