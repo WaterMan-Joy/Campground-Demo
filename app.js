@@ -12,8 +12,9 @@ const User = require('./models/user');
 
 const ExpressError = require('./utils/ExpressError');
 
-const campgrounds = require('./routes/campgrounds');
-const reviews = require('./routes/reviews');
+const campgroundsRoutes = require('./routes/campgrounds');
+const reviewsRoutes = require('./routes/reviews');
+const usersRoutes = require('./routes/users');
 
 const app = express()
 
@@ -58,15 +59,10 @@ app.use((req, res, next) => {
     next();
 })
 
-app.get('/fakeUser', async (req, res) => {
-    const user = new User({ email: 'sumkim93@gmail.com', username: 'Joy' });
-    console.log(user)
-    const newUser = await User.register(user, 'chicken');
-    console.log(newUser)
-    res.send(`${newUser} ******** ${user}`);
-})
-app.use('/campgrounds', campgrounds);
-app.use('/campgrounds/:id/reviews', reviews);
+
+app.use('/campgrounds', campgroundsRoutes);
+app.use('/campgrounds/:id/reviews', reviewsRoutes);
+app.use('/', usersRoutes);
 app.use(express.static(path.join(__dirname, 'public')));
 
 
