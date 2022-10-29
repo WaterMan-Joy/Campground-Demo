@@ -18,21 +18,13 @@ router.get('/login', (req, res) => {
 })
 
 
-// TODO: POST LOGINT FIXME:
+// TODO: POST LOGIN FIXME:
 router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
-    req.flash('success', '로그인이 되었습니다');
+    req.flash('success', '로그인 되었습니다');
     const redirectUrl = req.session.returnTo || '/campgrounds';
-    console.log(redirectUrl);
     delete req.session.returnTo;
-    console.log(redirectUrl);
-    res.redirect(req.session.returnTo || '/campgrounds');
-    // try {
-    // }
-    // catch (e) {
-    //     req.flash('error', '로그인을 실패하였습니다');
-    //     res.redirect('/login');
-    // }
-});
+    res.redirect(redirectUrl);
+})
 
 // // TODO: LOGOUT
 router.get('/logout', catchAsync(async (req, res) => {
@@ -44,7 +36,7 @@ router.get('/logout', catchAsync(async (req, res) => {
       req.flash('success', '로그아웃 되었습니다');
       res.redirect('/campgrounds');
     });
-  }));
+}));
 
 
 // TODO: POST REGISTER

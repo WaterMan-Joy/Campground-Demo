@@ -40,7 +40,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 
 // TODO: GET
 router.get('/:id', catchAsync(async (req, res) => {
-    const findID = await Campground.findById(req.params.id).populate('reviews')
+    const findID = await Campground.findById(req.params.id).populate('reviews').populate('author')
     if (!findID) {
         req.flash('error', '캠프를 찾을 수 없습니다')
         return res.redirect('/campgrounds');
