@@ -6,13 +6,16 @@
       <img class="img-thumbnail" src="<%= findID.image %> " alt="" />
       <div class="card-body">
         <h5 class="card-title">업체 - <%= findID.title %></h5>
-        <h2 class="card-text">사업자 이름 - <%= findID.author.username %></h2>
         <p class="card-text"><%= findID.description %></p>
       </div>
       <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          사용자 이름 - <%= findID.author.username %>
+        </li>
         <li class="list-group-item">위치 - <%= findID.location %></li>
         <li class="list-group-item">$ <%= findID.price %> 원</li>
       </ul>
+      <% if (currentUser && findID.author.equals(currentUser._id)) { %>
       <div class="card-body">
         <a
           class="card-link btn btn-warning"
@@ -27,6 +30,7 @@
           <button class="btn btn-danger">삭제</button>
         </form>
       </div>
+      <% } %>
       <div class="card-footer">
         <a class="card-link" href="/campgrounds">모든 캠프 보기</a>
       </div>

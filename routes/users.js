@@ -19,11 +19,13 @@ router.get('/login', (req, res) => {
 
 
 // TODO: POST LOGIN FIXME:
-router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login' }), (req, res) => {
+router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo: true }), (req, res) => {
     req.flash('success', '로그인 되었습니다');
-    const redirectUrl = req.session.returnTo || '/campgrounds';
-    delete req.session.returnTo;
-    res.redirect(redirectUrl);
+    // const redirectUrl = req.session.returnTo || '/campgrounds';
+    // console.log(redirectUrl);
+    // delete req.session.returnTo;
+    // res.redirect(redirectUrl);
+    res.redirect('/campgrounds');
 })
 
 // // TODO: LOGOUT
@@ -34,7 +36,7 @@ router.get('/logout', catchAsync(async (req, res) => {
         return res.redirect('/campgrounds');
       }
       req.flash('success', '로그아웃 되었습니다');
-      res.redirect('/campgrounds');
+      res.redirect('/login');
     });
 }));
 

@@ -27,10 +27,16 @@ const validateCampground = (req, res, next) => {
 
 // TODO: GET
 router.get('/', catchAsync(async (req, res) => {
-    const campgrounds = await Campground.find({})
-    res.render('campgrounds/index', {
-        campgrounds
-    })
+    try {
+        const campgrounds = await Campground.find({})
+        res.render('campgrounds/index', {
+            campgrounds
+        })
+    }
+    catch (e) {
+        req.flash('error', '캠프를 불로오기 실패했습니다');
+        req.redirect('/campgrounds');
+    }
 }))
 
 // TODO: GET
@@ -64,7 +70,8 @@ router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
 
 // TODO: POST CAMPGROUND
 router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
-    const campground = new Campground(req.body.campground)
+    const campground = new Campground(req.body.campground);
+    campground.author = req.user._id;
     await campground.save()
     req.flash('success', '새로운 캠프가 등록되었습니다')
     res.redirect(`/campgrounds/${campground._id}`)
