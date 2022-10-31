@@ -78,14 +78,16 @@
         class="list-group-item d-flex justify-content-between align-items-start"
       >
         <div class="ms-2 me-auto">
-          <% if (currentUser.username === review.author.username) { %>
-          <div class="fw-bold">내 댓글</div>
+          <% if (currentUser && review.author.equals(currentUser._id)) { %>
+          <div <span class="badge text-bg-success">내 댓글</span></div>
           <% } else if (review.author.username === findID.author.username) { %>
-          <div class="fw-bold">사장님 댓글</div>
+          <div <span class="badge text-bg-primary">사장님 댓글</span></div>
           <% } else {%>
 
-          <div class="fw-bold"><%= review.author.username %></div>
-          <% } %> 댓글 - <%= review.body %>
+          <div <span class="badge text-bg-light"><%= review.author.username %></span>
+            
+          </div>
+          <% } %> - <%= review.body %>
         </div>
         <% if (currentUser && review.author.equals(currentUser._id)) { %>
         <form
