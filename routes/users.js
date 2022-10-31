@@ -8,21 +8,18 @@ const users = require('../controllers/users');
 const catchAsync = require('../utils/catchAsync');
 
 
-// TODO: GET REGISTER
-router.get('/register', users.renderRegister);
-
-// TODO: GET LOGIN
-router.get('/login', users.renderLogin);
+router.route('/login')
+    .get(users.renderLogin)
+    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo: true }), users.login)
 
 
-// TODO: POST LOGIN FIXME:
-router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo: true }), users.login)
+router.route('/register')
+    .get(users.renderRegister)
+    .post(catchAsync(users.register))
+    .get(users.renderRegister);
 
-// // TODO: LOGOUT
-router.get('/logout', catchAsync(users.logout));
 
 
-// TODO: POST REGISTER
-router.post('/register', catchAsync(users.register));
+router.get('/logout',catchAsync(users.logout));
 
 module.exports = router;

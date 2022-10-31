@@ -8,28 +8,21 @@ const { isLoggedIn, isAuthor, validateCampground } = require('../middleware');
 
 
 
-
-
-// TODO: GET
-router.get('/', catchAsync(campgrounds.index));
-
-// TODO: GET
 router.get('/new', isLoggedIn, campgrounds.newForm);
 
-// TODO: GET
-router.get('/:id', catchAsync(campgrounds.showPage));
+router.route('/')
+    .get(catchAsync(campgrounds.index))
+    .post(isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground))
 
-// TODO: GET
+router.route('/:id')
+    .get(catchAsync(campgrounds.showPage))
+    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.editCampground))
+    .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground))
+
+
 router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.editFrom))
 
-// TODO: POST CAMPGROUND
-router.post('/', isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
 
-// TODO: PUT CAMPGROUND
-router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.editCampground))
-
-// TODO: DELETE CAMPGROUND
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground));
 
 
 
