@@ -8,30 +8,9 @@ const Campground = require('../models/campground');
 const Review = require('../models/review');
 
 const { campgroundSchema } = require('../schemas');
-const { isLoggedIn } = require('../middleware');
+const { isLoggedIn, isAuthor, validateCampground } = require('../middleware');
 
 
-
-const validateCampground = (req, res, next) => {
-    const { error } = campgroundSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    }
-    else {
-        next();
-    }
-}
-
-const isAuthor = async (req, res, next) => {
-    const { id } = req.params;
-    const campground = await Campground.findById(id);
-    if (!campground.author.equals(req.user._id)) {
-        req.flash('error', '승인된 사용자가 아닙니다');
-        return res.redirect(`/campgrounds/${id}`);
-    }
-    next();
-}
 
 
 
@@ -107,8 +86,8 @@ router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
         // throw new ExpressError('삭제하지 못했습니다!', 400);
     }
     await Campground.findByIdAndDelete(id)
-        req.flash('success', '캠프가 삭제되었습니다');
-        res.redirect('/campgrounds')
+    req.flash('success', '캠프가 삭제되었습니다');
+    res.redirect('/campgrounds')
 }));
 
 
