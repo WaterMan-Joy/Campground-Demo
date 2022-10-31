@@ -1,13 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const campgrounds = require('../controllers/campgrounds');
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError')
 
-const Campground = require('../models/campground');
-const Review = require('../models/review');
-
-const { campgroundSchema } = require('../schemas');
 const { isLoggedIn, isAuthor, validateCampground } = require('../middleware');
 
 
@@ -15,85 +11,25 @@ const { isLoggedIn, isAuthor, validateCampground } = require('../middleware');
 
 
 // TODO: GET
-router.get('/', catchAsync(async (req, res) => {
-    try {
-        const campgrounds = await Campground.find({})
-        res.render('campgrounds/index', {
-            campgrounds
-        })
-    }
-    catch (e) {
-        req.flash('error', '캠프를 불로오기 실패했습니다');
-        req.redirect('/campgrounds');
-    }
-}))
+router.get('/', catchAsync(campgrounds.index));
 
 // TODO: GET
-router.get('/new', isLoggedIn, (req, res) => {
-    res.render('campgrounds/new')
-})
+router.get('/new', isLoggedIn, campgrounds.newForm);
 
 // TODO: GET
-router.get('/:id', catchAsync(async (req, res) => {
-    const findID = await Campground.findById(req.params.id).populate({
-        path: 'reviews',
-        populate: {
-            path: 'author'
-        }
-    }).populate('author')
-    if (!findID) {
-        req.flash('error', '캠프를 찾을 수 없습니다')
-        return res.redirect('/campgrounds');
-    }
-    res.render('campgrounds/show', {
-        findID,
-    })
-}));
+router.get('/:id', catchAsync(campgrounds.showPage));
 
 // TODO: GET
-router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
-    const { id } = req.params
-    const findID = await Campground.findById(id);
-    if (!findID) {
-        req.flash('error', '수정할 캠프를 찾을 수 없습니다')
-        return res.redirect('/campgrounds');
-    }
-    res.render('campgrounds/edit', {
-        findID
-    })
-}))
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(campgrounds.editFrom))
 
 // TODO: POST CAMPGROUND
-router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
-    const campground = new Campground(req.body.campground);
-    campground.author = req.user._id;
-    await campground.save()
-    req.flash('success', '새로운 캠프가 등록되었습니다')
-    res.redirect(`/campgrounds/${campground._id}`)
-}))
+router.post('/', isLoggedIn, validateCampground, catchAsync(campgrounds.createCampground));
 
 // TODO: PUT CAMPGROUND
-router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(async (req, res) => {
-    const { id } = req.params
-    const campgroundID = await Campground.findById(id);
-    const camp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true, new: true })
-    req.flash('success', '캠프가 수정 되었습니다')
-    res.redirect(`/campgrounds/${campgroundID._id}`)
-}))
+router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.editCampground))
 
 // TODO: DELETE CAMPGROUND
-router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
-    const { id } = req.params
-    const findID = await Campground.findById(id);
-    if (!findID) {
-        req.flash('error', '캠프를 삭제하지 못했습니다');
-        return res.redirect('/campgrounds')
-        // throw new ExpressError('삭제하지 못했습니다!', 400);
-    }
-    await Campground.findByIdAndDelete(id)
-    req.flash('success', '캠프가 삭제되었습니다');
-    res.redirect('/campgrounds')
-}));
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground));
 
 
 
