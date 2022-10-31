@@ -23,6 +23,16 @@ const validateCampground = (req, res, next) => {
     }
 }
 
+const isAuthor = async (req, res, next) => {
+    const { id } = req.params;
+    const campground = await Campground.findById(id);
+    if (!campground.author.equals(req.user._id)) {
+        req.flash('error', '승인된 사용자가 아닙니다');
+        return res.redirect(`/campgrounds/${id}`);
+    }
+    next();
+}
+
 
 
 // TODO: GET
@@ -57,8 +67,9 @@ router.get('/:id', catchAsync(async (req, res) => {
 }));
 
 // TODO: GET
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
-    const findID = await Campground.findById(req.params.id)
+router.get('/:id/edit', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
+    const { id } = req.params
+    const findID = await Campground.findById(id);
     if (!findID) {
         req.flash('error', '수정할 캠프를 찾을 수 없습니다')
         return res.redirect('/campgrounds');
@@ -78,20 +89,16 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res) => 
 }))
 
 // TODO: PUT CAMPGROUND
-router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, isAuthor, validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params
     const campgroundID = await Campground.findById(id);
-    if (!campgroundID.author.equal(req.user._id)) {
-        req.flash('error', '승인되지 않은 사용자 입니다');
-        return res.redirect(`/campgrounds/${id}`);
-    }
-    // const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true, new: true })
+    const camp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true, new: true })
     req.flash('success', '캠프가 수정 되었습니다')
     res.redirect(`/campgrounds/${campgroundID._id}`)
 }))
 
 // TODO: DELETE CAMPGROUND
-router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const { id } = req.params
     const findID = await Campground.findById(id);
     if (!findID) {
@@ -99,11 +106,9 @@ router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
         return res.redirect('/campgrounds')
         // throw new ExpressError('삭제하지 못했습니다!', 400);
     }
-    else {
-        await Campground.findByIdAndDelete(id)
+    await Campground.findByIdAndDelete(id)
         req.flash('success', '캠프가 삭제되었습니다');
         res.redirect('/campgrounds')
-    }
 }));
 
 
