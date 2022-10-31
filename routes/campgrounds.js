@@ -80,9 +80,14 @@ router.post('/', isLoggedIn, validateCampground, catchAsync(async (req, res) => 
 // TODO: PUT CAMPGROUND
 router.put('/:id', isLoggedIn, validateCampground, catchAsync(async (req, res) => {
     const { id } = req.params
-    const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true, new: true })
+    const campgroundID = await Campground.findById(id);
+    if (!campgroundID.author.equal(req.user._id)) {
+        req.flash('error', '승인되지 않은 사용자 입니다');
+        return res.redirect(`/campgrounds/${id}`);
+    }
+    // const newCamp = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true, new: true })
     req.flash('success', '캠프가 수정 되었습니다')
-    res.redirect(`/campgrounds/${newCamp._id}`)
+    res.redirect(`/campgrounds/${campgroundID._id}`)
 }))
 
 // TODO: DELETE CAMPGROUND
