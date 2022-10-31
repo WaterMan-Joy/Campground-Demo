@@ -3,63 +3,26 @@ const passport = require('passport');
 const { isLoggedIn } = require('../middleware');
 const router = express.Router({mergeParams: true});
 const User = require('../models/user');
+const users = require('../controllers/users');
 
 const catchAsync = require('../utils/catchAsync');
 
 
 // TODO: GET REGISTER
-router.get('/register', (req, res) => {
-    res.render('users/register');
-})
+router.get('/register', users.renderRegister);
 
 // TODO: GET LOGIN
-router.get('/login', (req, res) => {
-    res.render('users/login');
-})
+router.get('/login', users.renderLogin);
 
 
 // TODO: POST LOGIN FIXME:
-router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo: true }), (req, res) => {
-    req.flash('success', '로그인 되었습니다');
-    // const redirectUrl = req.session.returnTo || '/campgrounds';
-    // console.log(redirectUrl);
-    // delete req.session.returnTo;
-    // res.redirect(redirectUrl);
-    res.redirect('/campgrounds');
-})
+router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', keepSessionInfo: true }), users.login)
 
 // // TODO: LOGOUT
-router.get('/logout', catchAsync(async (req, res) => {
-    req.logout(function (err) {
-      if (err) {
-        req.flash('error', '로그인에 실패하였습니다');
-        return res.redirect('/campgrounds');
-      }
-      req.flash('success', '로그아웃 되었습니다');
-      res.redirect('/login');
-    });
-}));
+router.get('/logout', catchAsync(users.logout));
 
 
 // TODO: POST REGISTER
-router.post('/register', catchAsync(async (req, res, next) => {
-    try {
-        const { username, email, password } = req.body;
-        const user = new User({ username, email });
-        const registeredUser = await User.register(user, password);
-        console.log(registeredUser);
-        req.login(registeredUser, err => {
-            if (err) {
-                return next(err);
-            }
-            req.flash('success', '회원가입을 축하드립니다');
-            res.redirect('/campgrounds');
-        })
-    }
-    catch (e) {
-        req.flash('error', '회원 가입에 실패하였습니다');
-        res.redirect('/register')
-    }
-}));
+router.post('/register', catchAsync(users.register));
 
 module.exports = router;
