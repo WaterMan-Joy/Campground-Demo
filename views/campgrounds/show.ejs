@@ -78,18 +78,26 @@
         class="list-group-item d-flex justify-content-between align-items-start"
       >
         <div class="ms-2 me-auto">
-          <div class="fw-bold"><%= review._id %></div>
-          <%= review.body %>
+          <% if (currentUser.username === review.author.username) { %>
+          <div class="fw-bold">내 댓글</div>
+          <% } else if (review.author.username === findID.author.username) { %>
+          <div class="fw-bold">사장님 댓글</div>
+          <% } else {%>
+
+          <div class="fw-bold"><%= review.author.username %></div>
+          <% } %> 댓글 - <%= review.body %>
         </div>
-        <span class="badge bg-primary rounded-pill"
-          ><%= review.rating %> 점
-        </span>
+        <% if (currentUser && review.author.equals(currentUser._id)) { %>
         <form
           action="/campgrounds/<%=findID._id%>/reviews/<%=review._id%>?_method=DELETE"
           method="POST"
         >
           <button class="btn">삭제</button>
         </form>
+        <% } %>
+        <span class="badge bg-primary rounded-pill"
+          ><%= review.rating %> 점
+        </span>
       </div>
       <% } %>
     </div>

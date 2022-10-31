@@ -8,23 +8,24 @@ const Campground = require('../models/campground')
 const Review = require('../models/review');
 
 const { reviewSchema } = require('../schemas');
-const { isLoggedIn, validateReview, isAuthor } = require('../middleware');
+const { isLoggedIn, validateReview, isAuthor, isReviewAuthor } = require('../middleware');
 
 
 // TODO: POST REVIEW
 router.post('/', isLoggedIn, validateReview, catchAsync(async (req, res) => {
-    const findID = await Campground.findById(req.params.id)
+    const campground = await Campground.findById(req.params.id)
     const review = new Review(req.body.review);
-    findID.reviews.push(review);
+    review.author = req.user._id;
+    campground.reviews.push(review);
     await review.save();
     console.log(review)
-    await findID.save();
+    await campground.save();
     req.flash('success', '댓글 등록 완료');
-    res.redirect(`/campgrounds/${findID._id}`);
+    res.redirect(`/campgrounds/${campground._id}`);
 }));
 
 // TODO: DELETE REVIEWS IN CMAPGROUND
-router.delete('/:reviewId', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
+router.delete('/:reviewId', isLoggedIn, isReviewAuthor, catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     console.log(`${id}-------${reviewId}`);
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
