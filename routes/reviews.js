@@ -8,19 +8,8 @@ const Campground = require('../models/campground')
 const Review = require('../models/review');
 
 const { reviewSchema } = require('../schemas');
-const { isLoggedIn } = require('../middleware');
+const { isLoggedIn, validateReview, isAuthor } = require('../middleware');
 
-
-const validateReview = (req, res, next) => {
-    const { error } = reviewSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',');
-        throw new ExpressError(msg, 400);
-    }
-    else {
-        next();
-    }
-}
 
 // TODO: POST REVIEW
 router.post('/', isLoggedIn, validateReview, catchAsync(async (req, res) => {
@@ -32,16 +21,17 @@ router.post('/', isLoggedIn, validateReview, catchAsync(async (req, res) => {
     await findID.save();
     req.flash('success', '댓글 등록 완료');
     res.redirect(`/campgrounds/${findID._id}`);
-}))
+}));
+
 // TODO: DELETE REVIEWS IN CMAPGROUND
-router.delete('/:reviewId', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:reviewId', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
     const { id, reviewId } = req.params;
     console.log(`${id}-------${reviewId}`);
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
     req.flash('success', '댓글 삭제 완료');
     res.redirect(`/campgrounds/${id}`);
-}))
+}));
 
 
 module.exports = router;

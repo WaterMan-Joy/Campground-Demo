@@ -70,6 +70,7 @@
       </div>
       <button type="submit" class="btn btn-success">댓글달기</button>
     </form>
+    <% if(!currentUser) {%> <% } else {%>
 
     <div class="list-group">
       <% for (let review of findID.reviews) { %>
@@ -92,5 +93,6 @@
       </div>
       <% } %>
     </div>
+    <% } %>
   </div>
 </div>
