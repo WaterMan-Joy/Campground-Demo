@@ -7,6 +7,7 @@
       method="POST"
       novalidate
       class="needs-validation"
+      enctype="multipart/form-data"
     >
       <div class="mb-3">
         <label class="form-label" for="title">업체 이름</label>
@@ -48,8 +49,8 @@
           <div class="valid-feedback">가격 가능합니다</div>
         </div>
       </div>
-
-      <div class="mb-3">
+      <input type="file" name="image" id="" multiple />
+      <!-- <div class="mb-3">
         <label class="form-label" for="image">이미지 URL</label>
         <input
           class="form-control"
@@ -60,7 +61,7 @@
           required
         />
         <div class="valid-feedback">이미지 가능합니다</div>
-      </div>
+      </div> -->
       <div class="mb-3">
         <label class="form-label" for="description">상세정보</label>
         <textarea

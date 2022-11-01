@@ -20,8 +20,10 @@ module.exports.newForm = (req, res) => {
 
 module.exports.createCampground = async (req, res) => {
     const campground = new Campground(req.body.campground);
+    campground.images = await req.files.map(f => ({ url: f.path, filename: f.filename }));
     campground.author = req.user._id;
     await campground.save()
+    console.log(campground);
     req.flash('success', '새로운 캠프가 등록되었습니다')
     res.redirect(`/campgrounds/${campground._id}`)
 }

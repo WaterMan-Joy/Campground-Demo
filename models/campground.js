@@ -7,10 +7,12 @@ const CampgroundSchema = new Schema({
         type: String,
         required: [true, "CAN NOT FOUND TITLE"],
     },
-    image: {
-        type: String,
-        required: true,
-    },
+    images: [
+        {
+            url: String,
+            filename: String,
+        }
+    ],
     price: {
         type: Number,
         required: true

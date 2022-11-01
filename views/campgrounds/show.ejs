@@ -4,7 +4,9 @@
 <div class="row">
   <div class="col-6">
     <div class="card">
-      <img class="img-thumbnail" src="<%= findID.image %> " alt="" />
+      <% for (let img of findID.images) { %> 
+        <img class="img-thumbnail" src="<%= img.url %> " alt="" />
+        <% } %> 
       <div class="card-body">
         <h5 class="card-title">업체 - <%= findID.title %></h5>
         <p class="card-text"><%= findID.description %></p>
@@ -38,7 +40,7 @@
     </div>
   </div>
   <div class="col-6">
-    <h2>댓글 달기</h2>
+    <h2><%= findID.title %> </h2>
     <form
       action="/campgrounds/<%=findID._id%>/reviews"
       method="POST"
@@ -47,7 +49,7 @@
     >
       <div class="mb-3">
       <fieldset class="starability-basic">
-        <legend>First rating:</legend>
+        <legend>댓글 달기</legend>
         <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
         <input type="radio" id="first-rate1" name="review[rating]" value="1" />
         <label for="first-rate1" title="Terrible">1 star</label>
