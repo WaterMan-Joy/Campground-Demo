@@ -3,10 +3,28 @@
 
 <div class="row">
   <div class="col-6">
+
+    
     <div class="card">
-      <% for (let img of findID.images) { %> 
-        <img class="img-thumbnail" src="<%= img.url %> " alt="" />
-        <% } %> 
+    
+      <div id="carouselExampleFade" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <% for (let img of findID.images) { %> 
+          <div class="carousel-item active">
+            <img src="<%= img.url %>" class="d-block w-100" alt="...">
+          </div>
+          <% } %> 
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    
       <div class="card-body">
         <h5 class="card-title">업체 - <%= findID.title %></h5>
         <p class="card-text"><%= findID.description %></p>
