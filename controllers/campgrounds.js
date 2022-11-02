@@ -58,14 +58,27 @@ module.exports.editFrom = async (req, res) => {
 
 module.exports.editCampground = async (req, res) => {
     const { id } = req.params
-    const campgroundID = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true, new: true })
+    console.log(req.body)
+    const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true, new: true })
     const imgs = req.files.map(f => ({
         url: f.path, filename: f.filename
     }));
-    campgroundID.images.push(...imgs);
-    await campgroundID.save();
+    campground.images.push(...imgs);
+    await campground.save();
+    if (req.body.deleteImages) {
+        await campground.updateOne({
+            $pull: {
+                images: {
+                    filename: {
+                        $in: req.body.deleteImages
+                    }
+                }
+            }
+        });
+        console.log(campground);
+    }
     req.flash('success', '캠프가 수정 되었습니다')
-    res.redirect(`/campgrounds/${campgroundID._id}`)
+    res.redirect(`/campgrounds/${campground._id}`)
 }
 
 module.exports.deleteCampground = async (req, res) => {

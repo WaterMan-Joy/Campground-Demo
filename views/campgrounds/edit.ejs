@@ -52,6 +52,23 @@
     <input type="file" name="image" id="image" multiple />
     <div class="valid-feedback">이미지 가능합니다</div>
   </div>
+
+  <div class="mb-3">
+    <% findID.images.forEach(function(img, i) { %>
+    <img class="img-thumbnail" src="<%= img.url %>" alt="" />
+    <div class="form-check-inline">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        value="<%= img.filename %>"
+        id="image-<%= i %>"
+        name="deleteImages[]"
+      />
+    </div>
+    <label class="form-check-label" for="image-<%= i %>">삭제</label>
+    <% }) %>
+  </div>
+
   <div class="mb-3">
     <label class="form-label" for="description">상세정보</label>
     <textarea
