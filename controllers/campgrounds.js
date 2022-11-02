@@ -1,5 +1,6 @@
 const Campground = require('../models/campground');
-
+const { cloudinary } = require('../cloudinary');
+const { find } = require('../models/campground');
 
 module.exports.index = async (req, res) => {
     try {
@@ -58,7 +59,6 @@ module.exports.editFrom = async (req, res) => {
 
 module.exports.editCampground = async (req, res) => {
     const { id } = req.params
-    console.log(req.body)
     const campground = await Campground.findByIdAndUpdate(id, { ...req.body.campground }, { runValidators: true, new: true })
     const imgs = req.files.map(f => ({
         url: f.path, filename: f.filename
@@ -66,6 +66,9 @@ module.exports.editCampground = async (req, res) => {
     campground.images.push(...imgs);
     await campground.save();
     if (req.body.deleteImages) {
+        for (let filename of req.body.deleteImages) {
+            await cloudinary.uploader.destroy(filename);
+        }
         await campground.updateOne({
             $pull: {
                 images: {
@@ -88,6 +91,10 @@ module.exports.deleteCampground = async (req, res) => {
         req.flash('error', '캠프를 삭제하지 못했습니다');
         return res.redirect('/campgrounds')
         // throw new ExpressError('삭제하지 못했습니다!', 400);
+    }
+    for (let img of findID.images) {
+        await cloudinary.uploader.destroy(img.filename);
+        console.log(img);
     }
     await Campground.findByIdAndDelete(id)
     req.flash('success', '캠프가 삭제되었습니다');
