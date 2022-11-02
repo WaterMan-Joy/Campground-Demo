@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const multer = require('multer')
 const { storage } = require('../cloudinary/index');
 const upload = multer({storage});
@@ -20,7 +21,7 @@ router.route('/')
 
 router.route('/:id')
     .get(catchAsync(campgrounds.showPage))
-    .put(isLoggedIn, isAuthor, validateCampground, catchAsync(campgrounds.editCampground))
+    .put(isLoggedIn, isAuthor, upload.array('image'), validateCampground, catchAsync(campgrounds.editCampground))
     .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampground))
 
 

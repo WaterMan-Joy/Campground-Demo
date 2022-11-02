@@ -6,14 +6,14 @@
   <div class="card mb-3">
     <div class="row">
       <div class="col-md-4">
-        <img class="img-fluid" src="<%= camp.image %> " alt="" />
+        <img class="img-fluid" src="<%= camp.images[0].url %> " alt="" />
       </div>
       <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title"><%= camp.title %></h5>
-          <p class="card-text"><%= camp.description %></p>
+          <h5 class="card-title">업체 이름 - <%= camp.title %></h5>
+          <p class="card-text">업체 설명 - <%= camp.description %></p>
           <p class="card-text">
-            <small class="text-muted"> <%= camp.location %> </small>
+            <small class="text-muted">업체 장소 - <%= camp.location %> </small>
           </p>
           <a class="btn btn-info" href="/campgrounds/<%= camp._id %>"
             >정보보기</a
