@@ -16,6 +16,17 @@ const CampgroundSchema = new Schema({
         required: [true, "CAN NOT FOUND TITLE"],
     },
     images: [ImageSchema],
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     price: {
         type: Number,
         required: true
