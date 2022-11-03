@@ -2,17 +2,20 @@ const mongoose = require('mongoose')
 const Review = require('./review')
 const Schema = mongoose.Schema
 
+const ImageSchema = new Schema({
+    url: String,
+    filename: String,
+})
+ImageSchema.virtual('thumbnail').get(function () {
+    return this.url.replace('/upload', '/upload/w_200,h_200,c_fit');
+});
+
 const CampgroundSchema = new Schema({
     title: {
         type: String,
         required: [true, "CAN NOT FOUND TITLE"],
     },
-    images: [
-        {
-            url: String,
-            filename: String,
-        }
-    ],
+    images: [ImageSchema],
     price: {
         type: Number,
         required: true
@@ -36,13 +39,6 @@ const CampgroundSchema = new Schema({
         }
     ]
 })
-
-// CampgroundSchema.post('findOneAndDelete', async function (camp) {
-//     if (camp.reviews.length) {
-//         const deleteReview = await Review.deleteMany({ _id: { $in: camp.reviews } });
-//         console.log(deleteReview);
-//     }
-// })
 
 CampgroundSchema.post('findOneAndDelete', async function (doc) {
     if (doc) {
