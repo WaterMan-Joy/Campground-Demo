@@ -12,6 +12,7 @@ ImageSchema.virtual("thumbnail").get(function () {
 });
 
 const opts = { toJSON: { virtuals: true } };
+// 가상 데이터를 사용하기 위한 방법
 
 const CampgroundSchema = new Schema(
   {
@@ -68,7 +69,7 @@ CampgroundSchema.post("findOneAndDelete", async function (doc) {
 });
 
 CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
-  return "저는 팝업 텍스트 입니다";
+  return `<a href="/campgrounds/${this._id}">${this.title}</a>`;
 });
 
 const Campground = mongoose.model("Campground", CampgroundSchema);

@@ -97,6 +97,7 @@ map.on("load", () => {
   map.on("click", "unclustered-point", (e) => {
     console.log("정보 클릭이 되었습니다");
     console.log(e.features[0]);
+    const text = e.features[0].properties.popUpMarkup;
     const coordinates = e.features[0].geometry.coordinates.slice();
     const mag = e.features[0].properties.mag;
     const tsunami = e.features[0].properties.tsunami === 1 ? "yes" : "no";
@@ -108,10 +109,7 @@ map.on("load", () => {
       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
 
-    new mapboxgl.Popup()
-      .setLngLat(coordinates)
-      .setHTML(`<h3>업장 이름 - </h3> <p>위치 - ${coordinates}}</p>`)
-      .addTo(map);
+    new mapboxgl.Popup().setLngLat(coordinates).setHTML(text).addTo(map);
   });
 
   map.on("mouseenter", "clusters", () => {
