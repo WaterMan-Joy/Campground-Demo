@@ -1,12 +1,22 @@
 <% layout('layouts/boilerplate') %>
 
+<div id="map" style="width: 100px; height: 500px"></div>
+
 <h1>새로운 캠프 만들기 <a href="/campgrounds/new">클릭</a></h1>
 <div>
   <% for (let camp of campgrounds) { %>
   <div class="card mb-3">
     <div class="row">
       <div class="col-md-4">
-        <img class="img-fluid" src="<%= camp.images[0].url %> " alt="" />
+        <% if (camp.images.length) { %>
+        <img class="img-fluid" src="<%= camp.images[0].url %>" alt="" />
+        <% } else { %>
+        <img
+          class="img-fluid"
+          src="https://res.cloudinary.com/dkuktrvsu/image/upload/v1667469836/Campground/tjt80kht6mfv4enhs6ut.jpg"
+          alt=""
+        />
+        <% } %>
       </div>
       <div class="col-md-8">
         <div class="card-body">
