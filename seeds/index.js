@@ -19,7 +19,7 @@ const randomArry = (array) => {
 
 const seedDB = async () => {
   await Campground.deleteMany({});
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 200; i++) {
     const random1000 = Math.floor(Math.random() * 1000);
     const price = Math.floor(Math.random() * 30) + 100;
     const basicCamp = new Campground({
@@ -29,15 +29,17 @@ const seedDB = async () => {
       description:
         "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Inventore natus mollitia iste autem deleniti optio similique labore ipsam nam culpa, quas cum repellat dolorem ab quo sed hic, quibusdam recusandae.",
       price,
-      geometry: { type: "Point", coordinates: [126.9782914, 37.5666791] },
+      geometry: {
+        type: "Point",
+        coordinates: [
+          cities[random1000].longitude,
+          cities[random1000].latitude,
+        ],
+      },
       images: [
         {
-          url: "https://res.cloudinary.com/dkuktrvsu/image/upload/v1667305208/Campground/ufimprufyafdxj0mq0if.jpg",
-          filename: "Campground/ufimprufyafdxj0mq0if",
-        },
-        {
-          url: "https://res.cloudinary.com/dkuktrvsu/image/upload/v1667305208/Campground/fr9hw8s5jfigvzru4cur.jpg",
-          filename: "Campground/fr9hw8s5jfigvzru4cur",
+          url: "https://res.cloudinary.com/dkuktrvsu/image/upload/v1667530120/Campground/novxubhvh1lwndibpz5g.jpg",
+          filename: "Campground/novxubhvh1lwndibpz5g",
         },
       ],
     });

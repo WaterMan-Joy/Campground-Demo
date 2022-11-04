@@ -6,50 +6,56 @@ const ImageSchema = new Schema({
   url: String,
   filename: String,
 });
+
 ImageSchema.virtual("thumbnail").get(function () {
   return this.url.replace("/upload", "/upload/w_200,h_200,c_fit");
 });
 
-const CampgroundSchema = new Schema({
-  title: {
-    type: String,
-    required: [true, "CAN NOT FOUND TITLE"],
-  },
-  images: [ImageSchema],
-  geometry: {
-    type: {
+const opts = { toJSON: { virtuals: true } };
+
+const CampgroundSchema = new Schema(
+  {
+    title: {
       type: String,
-      enum: ["Point"],
+      required: [true, "CAN NOT FOUND TITLE"],
+    },
+    images: [ImageSchema],
+    geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        required: true,
+      },
+      coordinates: {
+        type: [Number],
+        required: true,
+      },
+    },
+    price: {
+      type: Number,
       required: true,
     },
-    coordinates: {
-      type: [Number],
+    description: {
+      type: String,
       required: true,
     },
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  },
-  location: {
-    type: String,
-    required: true,
-  },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  reviews: [
-    {
+    location: {
+      type: String,
+      required: true,
+    },
+    author: {
       type: Schema.Types.ObjectId,
-      ref: "Review",
+      ref: "User",
     },
-  ],
-});
+    reviews: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Review",
+      },
+    ],
+  },
+  opts
+);
 
 CampgroundSchema.post("findOneAndDelete", async function (doc) {
   if (doc) {
@@ -59,6 +65,10 @@ CampgroundSchema.post("findOneAndDelete", async function (doc) {
       },
     });
   }
+});
+
+CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
+  return "저는 팝업 텍스트 입니다";
 });
 
 const Campground = mongoose.model("Campground", CampgroundSchema);

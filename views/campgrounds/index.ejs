@@ -1,6 +1,6 @@
 <% layout('layouts/boilerplate') %>
 
-<div id="map" style="width: 100px; height: 500px"></div>
+<div id="map" style="width: 700px; height: 500px"></div>
 
 <h1>새로운 캠프 만들기 <a href="/campgrounds/new">클릭</a></h1>
 <div>
@@ -13,7 +13,7 @@
         <% } else { %>
         <img
           class="img-fluid"
-          src="https://res.cloudinary.com/dkuktrvsu/image/upload/v1667469836/Campground/tjt80kht6mfv4enhs6ut.jpg"
+          src="https://res.cloudinary.com/dkuktrvsu/image/upload/v1667530120/Campground/novxubhvh1lwndibpz5g.jpg"
           alt=""
         />
         <% } %>
@@ -21,6 +21,9 @@
       <div class="col-md-8">
         <div class="card-body">
           <h5 class="card-title">업체 이름 - <%= camp.title %></h5>
+          <h5 class="card-title">
+            업체 이름 - <%= camp.properties.popUpMarkup %>
+          </h5>
           <p class="card-text">업체 설명 - <%= camp.description %></p>
           <p class="card-text">
             <small class="text-muted">업체 장소 - <%= camp.location %> </small>
@@ -34,3 +37,10 @@
   </div>
   <% } %>
 </div>
+
+<script>
+  const mapToken = "<%-process.env.MAPBOX_TOKEN%>";
+  const campgrounds = {features: <%-JSON.stringify(campgrounds)%>}
+</script>
+
+<script src="/javascripts/clusterMap.js"></script>
