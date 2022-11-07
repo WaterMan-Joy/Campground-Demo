@@ -1,10 +1,10 @@
 <% layout('layouts/boilerplate') %>
 
-<div class="card mb-3" id="map" style="width: 1200px; height: 500px"></div>
+<div class="card mb-3" id="cluster-map"></div>
 <h1>새로운 캠프 만들기 <a href="/campgrounds/new">클릭</a></h1>
-<div>
+<div class="row row-cols-1 row-cols-md-2 g-4">
   <% for (let camp of campgrounds) { %>
-  <div class="card mb-3">
+  <div class="card mb-3 border-secondary">
     <div class="row">
       <div class="col-md-4">
         <% if (camp.images.length) { %>
