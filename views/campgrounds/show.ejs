@@ -141,7 +141,7 @@
 
 <script>
   const mapToken = '<%-process.env.MAPBOX_TOKEN%>'
-  const findID = <%-JSON.stringify(findID)%>
+  const findID = <%- JSON.stringify(findID) %>
 </script>
 
 <script src="/javascripts/showPageMap.js"></script>

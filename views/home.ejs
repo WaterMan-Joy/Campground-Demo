@@ -1,5 +1,63 @@
-<% layout('layouts/boilerplate') %>
-<h1>홈페이지</h1>
+<!DOCTYPE html>
+<html lang="kor">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>홈페이지</title>
 
-<a href="/login">로그인 하기</a>
-<a href="/register">회원가입 하기</a>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="/stylesheets/home.css" />
+  </head>
+  <body class="d-flex text-center text-white bg-dark">
+    <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+      <header class="mb-auto">
+        <div>
+          <h3 class="float-md-start mb-0">홈페이지</h3>
+          <nav class="nav justify-content-center float-md-end">
+            <% if (!currentUser) {%>
+            <a class="nav-link" href="/login">로그인</a>
+            <a class="nav-link" href="/register">회원 가입</a>
+            <% } else {%>
+            <a class="nav-link" href="/logout">로그 아웃</a>
+            <% } %>
+          </nav>
+        </div>
+      </header>
+
+      <main class="px-3">
+        <h1>사업장</h1>
+        <p class="lead">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ullam labore
+          optio laborum, eius reprehenderit corporis nostrum a rem molestiae
+          assumenda magni nobis, non beatae placeat nesciunt explicabo veritatis
+          corrupti officiis.
+        </p>
+        <a class="btn btn-light fw-bold text-dark" href="/campgrounds"
+          >사업장 보기</a
+        >
+      </main>
+
+      <footer class="mt-auto text-bg-light">
+        <p>&copy; 2022</p>
+      </footer>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js"
+      integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

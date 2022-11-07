@@ -69,7 +69,11 @@ CampgroundSchema.post("findOneAndDelete", async function (doc) {
 });
 
 CampgroundSchema.virtual("properties.popUpMarkup").get(function () {
-  return `<a href="/campgrounds/${this._id}">${this.title}</a>`;
+  return `<a href="/campgrounds/${
+    this._id
+  }">업체 - ${this.title}</a><p>가격 - ${this.price}</p>
+  <p>${this.description.substring(0, 60)}..</p>
+  <img width="80" class="img-thumbnail" src="${this.images[0].url}" alt=""/>`;
 });
 
 const Campground = mongoose.model("Campground", CampgroundSchema);

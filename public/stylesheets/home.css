@@ -1,0 +1,24 @@
+body {
+  height: 100vh;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)),
+    url("https://res.cloudinary.com/dkuktrvsu/image/upload/v1667555192/Campground/exgrdzpbmdnw9qczjz4v.jpg");
+  background-size: cover;
+  background-position: center;
+}
+
+.cover-container {
+  max-width: 60vw;
+}
+
+.nav-link {
+  padding: 0.25rem 0;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin-left: 1rem;
+  border-bottom: 00.25rem solid transparent;
+}
+
+.nav-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.9);
+}

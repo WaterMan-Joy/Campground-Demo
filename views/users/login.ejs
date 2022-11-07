@@ -1,32 +1,39 @@
 <% layout('layouts/boilerplate') %>
 
-<h1>로그인</h1>
+<div class="container d-flex justify-content-center align-items-center mt-5">
+  <div class="row">
+    <div class="">
+      <div class="card-shadow">
+        <h1>로그인</h1>
+        <form class="needs-validation" novalidate action="/login" method="POST">
+          <div class="mb-3">
+            <label class="form-label" for="username">사용자 이름</label>
+            <input
+              class="form-control"
+              type="text"
+              name="username"
+              id="username"
+              required
+            />
+            <div class="valid-feedback">가능합니다</div>
+          </div>
 
-<form class="needs-validation" novalidate action="/login" method="POST">
-  <div class="mb-3">
-    <label class="form-label" for="username">사용자 이름</label>
-    <input
-      class="form-control"
-      type="text"
-      name="username"
-      id="username"
-      required
-    />
-    <div class="valid-feedback">가능합니다</div>
+          <div class="mb-3">
+            <label class="form-label" for="password">사용자 비밀번호</label>
+            <input
+              class="form-control"
+              type="password"
+              name="password"
+              id="password"
+              required
+            />
+            <div class="valid-feedback">가능합니다</div>
+          </div>
+
+          <button class="btn btn-primary">로그인</button>
+          <a href="/register">회원가입</a>
+        </form>
+      </div>
+    </div>
   </div>
-
-  <div class="mb-3">
-    <label class="form-label" for="password">사용자 비밀번호</label>
-    <input
-      class="form-control"
-      type="password"
-      name="password"
-      id="password"
-      required
-    />
-    <div class="valid-feedback">가능합니다</div>
-  </div>
-
-  <button class="btn btn-primary">로그인</button>
-  <a href="/register">회원가입</a>
-</form>
+</div>
