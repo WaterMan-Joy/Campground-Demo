@@ -20,6 +20,7 @@ const User = require("./models/user");
 
 const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
+const MongoStore = require("connect-mongo");
 
 const ExpressError = require("./utils/ExpressError");
 
@@ -29,7 +30,9 @@ const usersRoutes = require("./routes/users");
 
 const app = express();
 
-// const dbUrl = process.env.DB_URL;
+const dbUrl = "mongodb://localhost:27017/testcamp";
+const myDBUrl = process.env.DB_URL;
+const secret = process.env.SECRET || "isthiswatermankey";
 
 main()
   .then((res) => {
@@ -39,7 +42,7 @@ main()
 
 async function main() {
   // "mongodb://localhost:27017/testcamp"
-  await mongoose.connect("mongodb://localhost:27017/testcamp");
+  await mongoose.connect(dbUrl);
 }
 
 app.set("view engine", "ejs");
@@ -51,10 +54,22 @@ app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 app.use(mongoSanitize());
 
+const store = new MongoStore({
+  mongoUrl: dbUrl,
+  secret: secret,
+  touchAfter: 14 * 24 * 60 * 60,
+  //   ttl: 14 * 24 * 60 * 60, // = 14 days. Default
+});
+
+store.on("error", function (err) {
+  console.log("SESSION STORE ERR", err);
+});
+
 app.use(
   session({
+    store: store,
     name: "session",
-    secret: "thisismykey",
+    secret: secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
