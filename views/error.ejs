@@ -3,11 +3,12 @@
 <div class="row">
   <div class="col-10 offset-1">
     <div class="alert alert-danger" role="alert">
-      <h4 class="alert-heading">Error</h4>
-      <h4>status - <%= status %></h4>
-      <h4>status - <%= err %></h4>
+      <h4 class="alert-heading">에러</h4>
+      <% if (process.env.NODE_ENV !== "production") { %>
       <h4>message - <%= message %></h4>
+      <h4>err stack - <%= err.stack %></h4>
       <hr />
+      <% } %>
       <a href="/">홈으로 돌아가기</a>
     </div>
   </div>

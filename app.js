@@ -1,6 +1,10 @@
+// 프로덕션 모드가 아닌 개발 단계에서는 env 파일이 사라진다
+// 명령어 - NODE_ENV=production node app.js
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
+// 당장 이것을 쓰면 (에러 정보가 유저에게 나타나지 않는다)
+// require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -13,7 +17,9 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
+
 const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
 
 const ExpressError = require("./utils/ExpressError");
 
@@ -23,6 +29,8 @@ const usersRoutes = require("./routes/users");
 
 const app = express();
 
+// const dbUrl = process.env.DB_URL;
+
 main()
   .then((res) => {
     console.log("MONGOOSE CONECT!");
@@ -30,6 +38,7 @@ main()
   .catch((err) => console.log(err));
 
 async function main() {
+  // "mongodb://localhost:27017/testcamp"
   await mongoose.connect("mongodb://localhost:27017/testcamp");
 }
 
@@ -44,16 +53,20 @@ app.use(mongoSanitize());
 
 app.use(
   session({
+    name: "session",
     secret: "thisismykey",
     resave: false,
     saveUninitialized: true,
     cookie: {
+      httpOnly: true,
+      //   secure: true,
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   })
 );
 app.use(flash());
+// app.use(helmet());
 
 app.use(passport.initialize());
 app.use(passport.session());
