@@ -42,7 +42,7 @@ main()
 
 async function main() {
   // "mongodb://localhost:27017/testcamp"
-  await mongoose.connect(dbUrl);
+  await mongoose.connect(myDBUrl);
 }
 
 app.set("view engine", "ejs");
