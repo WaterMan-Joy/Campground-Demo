@@ -23,3 +23,4 @@ new mapboxgl.Marker({
   ) // add popup
 
   .addTo(map);
+map.addControl(new mapboxgl.NavigationControl());
